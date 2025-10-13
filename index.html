@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>성민탄성 · 블로그 자동작성 프로에디터 v5.3 PRO</title>
+<style>
+:root{
+  --black:#000;--dark:#121212;--ink:#1d1d1f;--silver:#e0e0e0;--white:#fff;--blue:#0071e3;
+  --radius:18px;--shadow:0 12px 40px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--dark);color:var(--silver);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans KR",sans-serif}
+header{position:sticky;top:0;z-index:10;background:#000;display:flex;gap:32px;justify-content:center;align-items:center;height:56px;box-shadow:0 2px 5px rgba(0,0,0,.5)}
+header a{color:#d0d0d0;text-decoration:none;font-size:15px;transition:.2s}
+header a:hover{color:var(--blue)}
+main{padding:50px 40px;display:flex;flex-direction:column;align-items:center}
+h1{color:#fff;font-size:38px;margin:0 0 28px;text-align:center}
+.container{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;width:100%;max-width:1700px}
+@media(max-width:1100px){.container{grid-template-columns:1fr}h1{font-size:28px}input,select,textarea,button{font-size:16px}}
+.panel{background:linear-gradient(155deg,#f7f7f7,#e7e7e7);color:var(--ink);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;overflow:auto}
+.panel h2{margin:0 0 12px;color:#000}
+label{display:block;margin:8px 0 4px;font-weight:600}
+input,select,textarea{width:100%;border:1px solid #ccc;border-radius:12px;padding:10px 12px;font-size:14px;outline:none}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.3)}
+.row{display:flex;flex-wrap:wrap;gap:10px}.row>div{flex:1 1 200px}
+.tile-grid{display:grid;gap:10px;grid-template-columns:repeat(5,minmax(160px,1fr))}
+@media(max-width:1100px){.tile-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}}
+.tile{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px 12px;
+  display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;transition:.15s;min-height:46px}
+.tile:hover{background:#eef5ff}
+.tile input{width:18px;height:18px}
+.tile.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,113,227,.25)}
+.list-box{background:#fff;border:2px dashed #bbb;border-radius:12px;min-height:260px;padding:12px}
+.sel-item{position:relative;background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px 14px;margin:6px 0;
+  display:flex;align-items:center;gap:10px;cursor:grab}
+.sel-num{font-weight:800;color:#000;width:28px;text-align:center}
+.del{margin-left:auto;background:none;border:none;color:#777;cursor:pointer;font-size:16px}
+.del:hover{color:#d00}
+#prompt,#correction{background:#f9f9f9;color:#1d1d1f;border:1px dashed #ccc;border-radius:12px;padding:14px;
+  white-space:pre-wrap;min-height:240px;font-family:ui-monospace,Consolas,monospace}
+#charCount{font-size:14px;margin-top:6px;font-weight:600}
+.btn{background:var(--blue);color:#fff;border:none;border-radius:999px;padding:10px 18px;
+  font-weight:700;cursor:pointer;transition:.2s}
+.btn:hover{background:#0a84ff}
+.btn.secondary{background:#e8e8ed;color:#1d1d1f}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+footer{margin-top:40px;padding:20px;color:#aaa;text-align:center;border-top:1px solid #2c2c2c}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+  background:#fff;color:#000;padding:10px 16px;border-radius:999px;font-weight:700;opacity:0;
+  pointer-events:none;transition:.25s;box-shadow:0 4px 15px rgba(0,0,0,.2)}
+.toast.show{opacity:1}
+.small{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://www.google.com/" target="_blank" rel="noopener">구글</a>
+  <a href="https://www.naver.com/" target="_blank" rel="noopener">네이버</a>
+  <a href="https://chat.openai.com/" target="_blank" rel="noopener">챗지피티</a>
+  <a href="https://claude.ai/" target="_blank" rel="noopener">클로드</a>
+</header>
+
+<main>
+  <h1>성민탄성 블로그 프로에디터 v5.3 PRO (SEO·교정·자동저장)</h1>
+  <div class="container">
+    <!-- 좌: 입력 -->
+    <section class="panel">
+      <h2>기본 입력</h2>
+      <div class="row">
+        <div><label>지역</label><input id="region" placeholder="예: 대전" oninput="saveAndUpdate()"></div>
+        <div><label>단지명</label><input id="apt" placeholder="예: 천동 리더스시티5BL" oninput="saveAndUpdate()"></div>
+      </div>
+      <div class="row">
+        <div><label>공간</label><input id="area" placeholder="예: 세탁실" oninput="saveAndUpdate()"></div>
+        <div><label>하자유형</label><input id="issue" placeholder="예: 결로, 곰팡이, 박리" oninput="saveAndUpdate()"></div>
+      </div>
+      <div class="row">
+        <div><label>도료등급</label><input id="grade" placeholder="예: 에어로겔" oninput="saveAndUpdate()"></div>
+        <div><label>도막두께</label><input id="paint" placeholder="예: 8mm (2회 질감)" oninput="saveAndUpdate()"></div>
+      </div>
+      <label>문체 / 말투</label>
+      <select id="tone" onchange="saveAndUpdate()">
+        <option value="friendly">👋 친근한 전문가형</option>
+        <option value="formal">🧾 공식 기술문체형</option>
+        <option value="objective">📊 객관 보고형</option>
+      </select>
+      <label style="margin-top:14px;">교정 대상 본문(붙여넣기)</label>
+      <textarea id="rawText" placeholder="교정할 원문을 여기에 붙여넣으세요" oninput="saveAndUpdate()"></textarea>
+      <p class="small">※ 교정 프롬프트에 SEO·DIA+·CRANK·뉴럴·스마트블록 기준이 자동 포함됩니다.</p>
+    </section>
+
+    <!-- 중: 모듈 타일 -->
+    <section class="panel">
+      <h2>모듈 선택 (타일형 · 순서=선택순서)</h2>
+      <div id="tileGrid" class="tile-grid"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="autoRecommend()">✨ 자동 추천</button>
+        <button class="btn secondary" onclick="clearSelection()">🧹 전체 해제</button>
+      </div>
+    </section>
+
+    <!-- 우: 구조/프롬프트 -->
+    <section class="panel">
+      <h2>선택된 구조 (드래그로 순서 변경)</h2>
+      <div id="selectedList" class="list-box"></div>
+
+      <h2 style="margin-top:16px;">작성 프롬프트</h2>
+      <div id="prompt"></div>
+      <div id="charCount">글자 수: 0자</div>
+      <div class="btn-row">
+        <button class="btn" onclick="copyPrompt()">📋 복사</button>
+        <button class="btn secondary" onclick="goChatGPT()">💬 ChatGPT</button>
+      </div>
+
+      <h2 style="margin-top:16px;">교정 프롬프트 (DIA+·CRANK·뉴럴·스마트블록)</h2>
+      <div id="correction"></div>
+      <div class="btn-row">
+        <button class="btn" onclick="copyCorrection()">📋 교정 프롬프트 복사</button>
+        <button class="btn secondary" onclick="copyCorrectionFormat()">🧩 출력 형식 복원용 프롬프트</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>© 2025 성민탄성 · Pro Editor v5.3 PRO</footer>
+<div id="toast" class="toast">✔ 복사되었습니다.</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+/* ---------- 데이터 ---------- */
+const MODULES=["현장 개요","생활 환경 요인","결로 발생 구조 분석","하자 원인 요약","표면 손상 상태",
+"기존 도장 상태","밑작업 개요","표면 세척 및 제거","샌딩 및 평탄화","퍼티 보수",
+"프라이머 도포","1차 도장","2차 도장","질감 표현","도료 등급 설명",
+"단열·조습 기능","항균·방수 기능","시공 전후 비교","도막 두께 관리","건조 후 상태",
+"시공 공정 요약","유지관리","통풍 관리","계절별 관리 팁","FAQ",
+"하자 재발 방지","관리 루틴","주의사항","마무리","종합 정리"];
+
+/* ---------- 요소 ---------- */
+const grid=document.getElementById('tileGrid');
+const sel=document.getElementById('selectedList');
+const promptOut=document.getElementById('prompt');
+const corrOut=document.getElementById('correction');
+const toast=document.getElementById('toast');
+const countEl=document.getElementById('charCount');
+
+/* ---------- 타일 생성 ---------- */
+MODULES.forEach(name=>{
+  const label=document.createElement('label');
+  label.className='tile';
+  const cb=document.createElement('input');
+  cb.type='checkbox';cb.value=name;
+  cb.onchange=()=>toggleModule(cb,label);
+  const span=document.createElement('span');span.textContent=name;
+  label.append(cb,span);grid.append(label);
+});
+
+/* ---------- 선택/해제 ---------- */
+function toggleModule(cb,label){
+  if(cb.checked){label.classList.add('selected');addSelected(cb.value);}
+  else{label.classList.remove('selected');removeSelected(cb.value);}
+  saveAndUpdate();
+}
+
+/* ---------- 선택 목록 ---------- */
+function addSelected(name){
+  if([...sel.children].some(x=>x.dataset.name===name))return;
+  const item=document.createElement('div');item.className='sel-item';item.dataset.name=name;
+  const num=document.createElement('div');num.className='sel-num';num.textContent=(sel.children.length+1);
+  const txt=document.createElement('div');txt.textContent=name;
+  const del=document.createElement('button');del.className='del';del.textContent='🗑';
+  del.onclick=()=>{item.remove();uncheckTile(name);renumber();saveAndUpdate();};
+  item.append(num,txt,del);sel.append(item);renumber(); // 드래그 타겟
+}
+function removeSelected(n){[...sel.children].forEach(x=>{if(x.dataset.name===n)x.remove()});renumber();}
+function uncheckTile(n){[...grid.querySelectorAll('.tile')].forEach(t=>{
+  const cb=t.querySelector('input');if(cb.value===n){cb.checked=false;t.classList.remove('selected');}});}
+function renumber(){[...sel.children].forEach((x,i)=>x.querySelector('.sel-num').textContent=(i+1));}
+
+/* ---------- 드래그로 순서 변경 ---------- */
+new Sortable(sel,{animation:150,handle:'.sel-item',onEnd:()=>{renumber();saveAndUpdate();}});
+
+/* ---------- 자동 추천 (제한 해제) ---------- */
+function autoRecommend(){
+  const s=(v('issue')+' '+v('area')+' '+v('grade')).toLowerCase();
+  const pick=new Set(["현장 개요","하자 원인 요약","밑작업 개요","시공 공정 요약","유지관리","마무리"]);
+  if(/결로/.test(s))pick.add("결로 발생 구조 분석"),pick.add("통풍 관리"),pick.add("단열·조습 기능");
+  if(/곰팡/.test(s))pick.add("항균·방수 기능"),pick.add("표면 세척 및 제거");
+  if(/베란다|발코니/.test(s))pick.add("샌딩 및 평탄화"),pick.add("퍼티 보수");
+  if(/에어로겔|세라믹|하이브리드/.test(s))pick.add("도료 등급 설명"),pick.add("질감 표현");
+  // 무제한 허용: 선택된 것만 반영
+  const arr=[...pick];
+  clearSelection(false);
+  arr.forEach(name=>{
+    [...grid.querySelectorAll('.tile')].forEach(t=>{
+      const cb=t.querySelector('input');if(cb.value===name){cb.checked=true;t.classList.add('selected');addSelected(name);}
+    });
+  });
+  saveAndUpdate();
+}
+function clearSelection(update=true){
+  [...grid.querySelectorAll('input')].forEach(cb=>cb.checked=false);
+  [...grid.querySelectorAll('.tile')].forEach(t=>t.classList.remove('selected'));
+  sel.innerHTML='';if(update)saveAndUpdate();
+}
+
+/* ---------- 프롬프트들 ---------- */
+function v(id){return(document.getElementById(id)?.value||'').trim();}
+function buildPrompt(){
+  const tone=v('tone');
+  const toneDesc=tone==='formal'?'정확하고 기술적인 문체로':
+    tone==='objective'?'데이터 중심의 객관 서술로':'친근한 전문가 구어체로';
+  const info=`지역=${v('region')} 단지명=${v('apt')} 공간=${v('area')} 하자유형=${v('issue')} 도료등급=${v('grade')} 도막두께=${v('paint')}`;
+  const order=[...sel.children].map((x,i)=>`${i+1}단락: ${x.dataset.name}`).join('\n');
+  const count=sel.children.length||1;
+  return(`너는 네이버 블로그 시공 전문 작가야.
+${toneDesc} 작성해. 제목·소제목·모듈명은 본문에 넣지 마.
+
+입력정보: ${info}
+선택된 모듈 수: ${count}개
+단락 구성:
+${order}
+
+작성 규칙:
+- 선택한 모듈 수(${count})에 맞춰 단락을 자연스럽게 분배
+- 전체 분량은 항상 공백 제외 약 2000자 내외(±10%)로 유지
+- 단락당 4~5문장, 종결어 남발 금지
+- “문제 → 원인 → 과정 → 결과” 흐름
+- 문체는 부드러운 설명형 구어체
+- 키워드(결로·곰팡이·탄성코트) 3~5% 비율 유지
+- 감탄사·미사여구·광고어 금지
+- 문장 구조·단어·접속사 다양화`).trim();
+}
+
+function buildCorrection(){
+  const raw=v('rawText');
+  return(`너는 네이버 블로그 상위노출 교정 전문가야.
+아래 입력 글을 DIA+, CRANK, 뉴럴, 스마트블록 기준으로 교정해.
+
+✳️ 교정 목표:
+전문 용어나 기술적 표현이 많아 일반 소비자가 이해하기 어렵기 때문에,
+내용의 의미를 유지하면서 쉽게 설명하되 전문가처럼 신뢰감이 느껴지게 다시 써줘.
+즉, ‘전문성을 유지한 소비자 친화형 설명문’을 만들어야 해.
+
+✳️ 교정 원칙:
+- 감탄사·미사여구·광고어 절대 금지
+- 기술적·객관적·정보 중심 문체 유지
+- 어려운 전문 용어는 풀어서 설명하거나 비유로 치환
+- 문장 길이는 15~20자, 단락은 4~5문장
+- 문체는 부드럽고 자연스러운 설명형 구어체
+- 종결어(했어요, 됩니다 등) 반복 금지, 리듬 다양화
+- 문단은 “문제 → 원인 → 과정 → 결과” 순으로 전개
+- SEO 필터 회피를 위해 문장 구조·단어·접속사 다양화
+- 주요 키워드(결로·곰팡이·탄성코트) 3~5% 비율 유지
+- 중복 문장 구조 금지, 의미는 동일하게 유지
+
+입력 글:
+${raw}
+
+출력 형식:
+- 각 단락은 한 줄 15~20자, 총 5~6줄로 구성된 1단락으로 작성
+- 총 24단락 내외, 공백 제외 2,000자 내외
+- 전문성은 유지하되, 읽는 사람이 시각적으로 이해할 수 있는 구조로
+- 제목, 소제목, 모듈명은 넣지 말고 본문만 작성`).trim();
+}
+
+/* ---------- 출력 형식 복원용 프롬프트 ---------- */
+function copyCorrectionFormat(){
+  const formatPrompt=
+`출력 형식:
+- 각 단락은 한 줄 15~20자, 총 5~6줄로 구성된 1단락으로 작성
+- 총 24단락 내외, 공백 제외 2,000자 내외
+- 전문성은 유지하되, 읽는 사람이 시각적으로 이해할 수 있는 구조로
+- 제목, 소제목, 모듈명은 넣지 말고 본문만 작성
+
+이 형식을 기준으로 즉시 다시 적용해줘.
+줄바꿈 구조가 깨졌다면 반드시 위 조건에 맞게 재정렬해줘.`;
+  navigator.clipboard.writeText(formatPrompt.replaceAll('\n','\r\n'));
+  toast.textContent='✔ 출력 형식 복사되었습니다.';
+  toast.classList.add('show');
+  setTimeout(()=>{toast.classList.remove('show');toast.textContent='✔ 복사되었습니다.';},1600);
+}
+
+/* ---------- 업데이트 & 카운터 ---------- */
+function updateAll(){
+  const p=buildPrompt();promptOut.textContent=p;
+  const n=p.replace(/\s/g,'').length;countEl.textContent=`글자 수: ${n}자`;
+  countEl.style.color=(n<1800||n>2200)?'#e67e22':'#0071e3';
+  corrOut.textContent=buildCorrection();
+}
+
+/* ---------- 저장/복원 ---------- */
+function saveState(){
+  const data={
+    region:v('region'),apt:v('apt'),area:v('area'),issue:v('issue'),
+    grade:v('grade'),paint:v('paint'),tone:v('tone'),rawText:v('rawText'),
+    modules:[...sel.children].map(x=>x.dataset.name),
+    checked:[...grid.querySelectorAll('input[type=checkbox]')].filter(cb=>cb.checked).map(cb=>cb.value)
+  };
+  localStorage.setItem('sungmin_editor_v53',JSON.stringify(data));
+}
+function loadState(){
+  const s=localStorage.getItem('sungmin_editor_v53'); if(!s) return;
+  try{
+    const d=JSON.parse(s);
+    ['region','apt','area','issue','grade','paint','tone','rawText'].forEach(id=>{
+      if(d[id]!==undefined) document.getElementById(id).value=d[id];
+    });
+    // 체크박스/타일 복원
+    [...grid.querySelectorAll('input[type=checkbox]')].forEach(cb=>{
+      cb.checked=d.checked?.includes(cb.value)||false;
+      cb.parentElement.classList.toggle('selected',cb.checked);
+    });
+    // 선택 구조 복원
+    sel.innerHTML='';
+    (d.modules||[]).forEach(name=>addSelected(name));
+  }catch(e){}
+}
+function saveAndUpdate(){saveState();updateAll();}
+
+/* ---------- 복사 & 이동 ---------- */
+function copyPrompt(){navigator.clipboard.writeText(promptOut.textContent.replaceAll('\n','\r\n'));showToast();}
+function copyCorrection(){navigator.clipboard.writeText(corrOut.textContent.replaceAll('\n','\r\n'));showToast();}
+function showToast(){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1500);}
+function goChatGPT(){copyPrompt();window.open('https://chat.openai.com/','_blank');}
+
+/* ---------- 유틸 ---------- */
+function v(id){return(document.getElementById(id)?.value||'').trim();}
+
+/* ---------- 초기화 ---------- */
+(function init(){loadState();updateAll();})();
+</script>
+</body>
+</html>
