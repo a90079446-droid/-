@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>탄성코트 시공 과정 (애니메이션)</title>
+<style>
+@font-face{font-family:P;src:url(../tanseong/Pretendard-Black.otf);font-weight:900}
+html,body{margin:0;background:#111}
+#c{position:relative;width:1080px;height:1920px;overflow:hidden;background:#111;font-family:P,sans-serif;font-weight:900;color:#fff}
+#c *{box-sizing:border-box}
+.abs{position:absolute}
+#pill{left:50%;top:120px;transform:translateX(-50%);font-size:44px;background:#C8FF2E;color:#111;border-radius:60px;padding:10px 38px;white-space:nowrap}
+#big{left:0;width:1080px;top:215px;text-align:center;font-size:150px;letter-spacing:-4px;line-height:1.1;white-space:nowrap;text-shadow:0 8px 0 rgba(0,0,0,.4)}
+#big span{display:inline-block}
+.cap{left:60px;width:960px;top:1500px;text-align:center;font-size:76px;line-height:1.28;letter-spacing:-1.5px;opacity:0;text-shadow:0 5px 0 rgba(0,0,0,.55)}
+.cap b{color:#C8FF2E;font-weight:900}
+.cap i{font-style:normal;display:inline-block;opacity:0;margin:0 .13em}
+#wall{left:60px;top:540px;width:960px;height:860px;border-radius:36px;overflow:hidden;background:#d8d2c4;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#wall>*{position:absolute}
+#wall .L{inset:0}
+.stain{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(20,24,16,.95) 0%,rgba(30,36,24,.75) 40%,rgba(30,36,24,0) 70%);filter:blur(6px)}
+.fl{position:absolute;width:16px;height:16px;background:#6b6254;border-radius:3px;opacity:0}
+#primer{background:#dfeaf4;clip-path:inset(0 0 100% 0)}
+#coat2{background:#f6f2ea;clip-path:inset(0 0 100% 0)}
+.col{position:absolute;top:0;height:860px;background:#ece6d8;clip-path:inset(0 0 100% 0)}
+.tool{opacity:0}
+.chip{left:50%;transform:translateX(-50%);top:36px;font-size:58px;background:#fff;color:#111;border-radius:60px;padding:12px 42px;opacity:0;white-space:nowrap}
+#prog{left:60px;top:1800px;width:960px;height:14px;display:flex;gap:10px}
+#prog div{flex:1;background:#2a2a2a;border-radius:7px;overflow:hidden}
+#prog div i{display:block;height:100%;width:0;background:#C8FF2E}
+#sun{left:760px;top:40px;width:150px;height:150px;opacity:0}
+#dm{left:290px;top:600px;width:500px;height:500px;border-radius:50%;background:#C8FF2E;color:#111;font-size:210px;line-height:500px;text-align:center;opacity:0}
+.sp{position:absolute;color:#ffc400;font-size:90px;opacity:0;text-shadow:0 0 14px #ffe08a}
+</style></head><body>
+<div id="c">
+ <div class="abs" id="pill">BEFORE</div>
+ <div class="abs" id="big"></div>
+ <div id="wall" class="abs">
+  <div class="L" id="stains"></div>
+  <svg class="L" id="svg" width="960" height="860" viewBox="0 0 960 860">
+   <path class="cr" d="M170 0 L205 140 L160 270 L230 420 L195 560" stroke="#3a3a30" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path class="cr" d="M740 90 L695 230 L760 350 L725 500 L790 650" stroke="#3a3a30" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path class="cr" d="M430 480 L490 570 L455 690 L520 810" stroke="#3a3a30" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path class="pt" d="M170 0 L205 140 L160 270 L230 420 L195 560" stroke="#f5f0e4" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path class="pt" d="M740 90 L695 230 L760 350 L725 500 L790 650" stroke="#f5f0e4" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path class="pt" d="M430 480 L490 570 L455 690 L520 810" stroke="#f5f0e4" stroke-width="20" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="L" id="debris"></div>
+  <div class="L" id="primer"></div>
+  <div class="L" id="cols"></div>
+  <div class="L" id="coat2"></div>
+  <div class="tool" id="scraper" style="width:300px;height:120px">
+    <div class="abs" style="left:0;top:38px;width:170px;height:44px;border-radius:22px;background:#9a6a35;box-shadow:0 6px 0 #6e4a22"></div>
+    <div class="abs" style="left:150px;top:10px;width:150px;height:100px;background:#c4c9cf;clip-path:polygon(0 20%,100% 0,100% 100%,0 80%);box-shadow:0 6px 0 #8c9199"></div>
+  </div>
+  <div class="tool" id="knife" style="width:320px;height:120px">
+    <div class="abs" style="left:0;top:40px;width:150px;height:42px;border-radius:21px;background:#ff8a3d;box-shadow:0 6px 0 #c2611f"></div>
+    <div class="abs" style="left:130px;top:22px;width:190px;height:78px;background:#d9dde2;clip-path:polygon(0 30%,100% 10%,100% 90%,0 70%);box-shadow:0 6px 0 #9aa0a7"></div>
+  </div>
+  <div class="tool" id="rollH" style="left:-30px;width:1020px;height:110px;top:-110px">
+    <div class="abs" style="left:0;top:0;width:1020px;height:86px;border-radius:43px;background:#8cc1f2;box-shadow:0 8px 0 #4f86bd"></div>
+  </div>
+  <div class="tool" id="rollV" style="width:130px;height:620px">
+    <div class="abs" style="left:0;top:100px;width:130px;height:520px;border-radius:44px;background:#ff9a52;box-shadow:8px 0 0 #c2611f"></div>
+    <div class="abs" style="left:56px;top:0;width:18px;height:110px;background:#555;border-radius:9px"></div>
+  </div>
+  <div class="tool" id="rollH2" style="left:-30px;width:1020px;height:110px;top:-110px">
+    <div class="abs" style="left:0;top:0;width:1020px;height:86px;border-radius:43px;background:#ffb27a;box-shadow:0 8px 0 #c2611f"></div>
+  </div>
+  <svg class="abs" id="sun" viewBox="-75 -75 150 150"><g id="sunr"><circle r="34" fill="#ffd23d"/><g stroke="#ffd23d" stroke-width="9" stroke-linecap="round"><path d="M0-48V-68M0 48V68M-48 0H-68M48 0H68M34-34L48-48M-34 34L-48 48M34 34L48 48M-34-34L-48-48"/></g></g></svg>
+  <div class="chip" id="chip">프라이머</div>
+  <div class="sp" id="sp1" style="left:150px;top:140px">✦</div><div class="sp" id="sp2" style="left:760px;top:260px">✦</div><div class="sp" id="sp3" style="left:420px;top:560px">✦</div><div class="sp" id="sp4" style="left:130px;top:620px">✦</div><div class="sp" id="sp5" style="left:810px;top:640px">✦</div>
+ </div>
+ <div class="abs" id="dm">DM</div>
+ <div id="caps"></div>
+ <div class="abs" id="prog"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eo=x=>1-Math.pow(1-cl(x),3), ei=x=>cl(x)*cl(x), eio=x=>{x=cl(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
+const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+// ---- timeline from narration lengths
+const AUD=[3.32,3.71,3.16,3.24,4.05,3.16,4.36,3.55];
+const DUR=AUD.map(a=>a+0.35); const ST=[]; let acc=0.3; DUR.forEach(d=>{ST.push(acc);acc+=d});
+const TOTAL=acc+0.5; window.TOTAL=TOTAL; window.STARTS=ST; window.AUD=AUD;
+const SC=[
+ ['BEFORE','곰팡이 벽','곰팡이 핀 **베란다** 벽, 이렇게 고쳐요.'],
+ ['STEP 1 / 6','긁어내기','먼저 **곰팡이**랑 들뜬 **페인트**를 싹 긁어내요.'],
+ ['STEP 2 / 6','균열 메우기','갈라진 **틈**은 **퍼티**로 꼼꼼하게 메워요.'],
+ ['STEP 3 / 6','프라이머','**프라이머**를 발라서 **바탕**을 단단하게 잡아요.'],
+ ['STEP 4 / 6','탄성코트 1차','**탄성코트** 1차, **롤러**로 골고루 밀어요.'],
+ ['STEP 5 / 6','건조 + 2차','충분히 **말린** 뒤에 **2차**를 한 번 더 발라요.'],
+ ['STEP 6 / 6','완성!','**마감**까지 끝나면, **깨끗하고 튼튼한** 벽 완성!'],
+ ['공짜','무료 상담','우리 집 벽 상태가 궁금하면, **DM** 주세요.']
+];
+// captions
+const capsEl=$('caps'); const CAPS=SC.map((s,i)=>{const d=document.createElement('div');d.className='abs cap';d.id='cap'+i;const ws=s[2].split(' ');const spans=ws.map(w=>{const sp=document.createElement('i');if(w.includes('**')){sp.innerHTML='<b>'+w.replace(/\*\*/g,'')+'</b>'}else sp.textContent=w;d.appendChild(sp);return sp});capsEl.appendChild(d);return {d,spans}});
+// progress
+const prog=$('prog');for(let i=0;i<6;i++){const s=document.createElement('div');s.innerHTML='<i></i>';prog.appendChild(s)}
+// stains
+const SP=[[150,150,280],[700,110,300],[400,380,320],[780,470,260],[160,620,300],[560,690,280],[880,240,220]];
+const stEl=$('stains');SP.forEach(([x,y,s])=>{const d=document.createElement('div');d.className='stain';d.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px;opacity:0`;stEl.appendChild(d)});
+// debris flakes
+const dbEl=$('debris');const FL=[];for(let i=0;i<SP.length*7;i++){const d=document.createElement('div');d.className='fl';dbEl.appendChild(d);FL.push(d)}
+// cracks
+const CR=[...document.querySelectorAll('.cr')],PT=[...document.querySelectorAll('.pt')];
+const svgNS=document.getElementById('svg');
+CR.concat(PT).forEach(p=>{const L=p.getTotalLength();p.dataset.L=L;p.style.strokeDasharray=L;p.style.strokeDashoffset=L});
+// columns for coat1
+const colsEl=$('cols');const COLS=[];const NC=6;for(let i=0;i<NC;i++){const c=document.createElement('div');c.className='col';c.style.left=(i*160)+'px';c.style.width=(160+1)+'px';colsEl.appendChild(c);COLS.push(c)}
+// big title letters
+const bigEl=$('big');let lastTitle=-1;
+function setTitle(i){if(i===lastTitle)return;lastTitle=i;bigEl.innerHTML='';[...SC[i][1]].forEach(ch=>{const s=document.createElement('span');s.textContent=ch===' '?' ':ch;bigEl.appendChild(s)});$('pill').textContent=SC[i][0]}
+function rr(el,x,y,rot=0,o=1){el.style.opacity=o;el.style.transform=`translate(${x}px,${y}px) rotate(${rot}deg)`}
+function render(t){
+ // which scene
+ let si=0;ST.forEach((s,i)=>{if(t>=s)si=i});
+ const s0=ST[si],dur=DUR[si],lt=t-s0;
+ setTitle(si);
+ // big title pop letters
+ [...bigEl.children].forEach((sp,k)=>{const u=back((lt-k*0.045)/0.45);sp.style.transform=`translateY(${(1-u)*70}px) scale(${.6+.4*u})`;sp.style.opacity=cl((lt-k*0.045)/0.15);sp.style.color=(si>=1&&si<=6)?'#fff':'#C8FF2E'});
+ const pu=back(lt/0.4);$('pill').style.transform=`translateX(-50%) scale(${.6+.4*pu})`;$('pill').style.opacity=cl(lt/0.15);
+ // captions
+ CAPS.forEach((c,i)=>{const on=(i===si);const a=AUD[i];c.d.style.opacity=on?1:0;if(on){c.spans.forEach((sp,k)=>{const at=0.1+(k/c.spans.length)*a*0.85;const u=eo((lt-at)/0.2);sp.style.opacity=u;sp.style.transform=`translateY(${(1-u)*24}px)`})}});
+ // progress
+ [...prog.children].forEach((p,i)=>{const u=cl((t-ST[i+1])/DUR[i+1]);p.firstChild.style.width=(u*100)+'%'});
+ prog.style.opacity=(si>=1&&si<=6)?1:(si===0?0.0:1);
+ // wall entrance
+ $('wall').style.opacity=si===7?1-cl((t-ST[7])/0.25):cl(t/0.3);
+ $('wall').style.transform=`scale(${.9+.1*back(t/0.5)})`;
+ // ---- S0 stains grow
+ const S=[...stEl.children];
+ // scene indexes
+ const t1=ST[1],t2=ST[2],t3=ST[3],t4=ST[4],t5=ST[5],t6=ST[6],t7=ST[7];
+ const arr=SP.map((_,i)=>t1+0.25+i*(DUR[1]*0.82/SP.length));
+ S.forEach((d,i)=>{const g=eo((t-0.3-i*0.12)/0.9);const rm=eo((t-arr[i])/0.3);d.style.opacity=g*(1-rm);d.style.transform=`scale(${.7+.3*g})`});
+ // ---- S1 scraper path
+ const sc=$('scraper');
+ if(t>=t1-0.1&&t<t2){const wp=[[-80,40]].concat(SP.map(([x,y])=>[x-90,y-40]));const ts=[t1-0.1].concat(arr);let k=0;for(let i=0;i<ts.length-1;i++){if(t>=ts[i])k=i}
+  const a=wp[k],b=wp[Math.min(k+1,wp.length-1)];const u=eio((t-ts[k])/(ts[Math.min(k+1,ts.length-1)]-ts[k]||1));
+  let x=lerp(a[0],b[0],u),y=lerp(a[1],b[1],u);
+  const scrub=(t>ts[1])?Math.sin(t*28)*14:0;rr(sc,x+scrub,y,-18+Math.sin(t*28)*3,cl((t-(t1-0.1))/0.2)*(1-cl((t-(t2-0.4))/0.3)));}
+ else sc.style.opacity=0;
+ // flakes
+ FL.forEach((f,j)=>{const i=Math.floor(j/7),k=j%7;const u=(t-arr[i])/0.7;if(u>0&&u<1){const ang=(k/7)*Math.PI*2+i;const r=eo(u)*(90+k*14);f.style.opacity=1-u;f.style.transform=`translate(${SP[i][0]+Math.cos(ang)*r}px,${SP[i][1]+Math.sin(ang)*r+u*u*120}px) rotate(${u*360}deg)`}else f.style.opacity=0});
+ // cracks appear during second half of S1 and stay until putty
+ CR.forEach((p,i)=>{const u=eo((t-(t1+DUR[1]*0.55+i*0.25))/0.7);p.style.strokeDashoffset=p.dataset.L*(1-u);});
+ // ---- S2 putty knife along cracks
+ const kn=$('knife');
+ if(t>=t2&&t<t3){const n=PT.length;const each=(DUR[2]-0.3)/n;let ki=Math.min(n-1,Math.floor((t-t2-0.1)/each));ki=Math.max(0,ki);
+  const lt2=(t-t2-0.1-ki*each)/each;PT.forEach((p,i)=>{const uu=i<ki?1:(i===ki?eio(lt2):0);p.style.strokeDashoffset=p.dataset.L*(1-uu)});
+  const p=PT[ki];const L=+p.dataset.L;const pos=p.getPointAtLength(L*eio(lt2));rr(kn,pos.x-120,pos.y-60,12,cl((t-t2)/0.2)*(1-cl((t-(t3-0.3))/0.3)));}
+ else {kn.style.opacity=0;if(t>=t3)PT.forEach(p=>p.style.strokeDashoffset=0)}
+ // ---- S3 primer roller descending
+ const rh=$('rollH'),pr=$('primer');
+ const u3=eio((t-t3-0.25)/(DUR[3]-0.7));
+ pr.style.clipPath=`inset(0 0 ${100-u3*100}% 0)`;
+ if(t>=t3&&t<t4){rr(rh,0,-110+u3*(860+110),0,cl((t-t3)/0.2)*(1-cl((t-(t4-0.25))/0.25)));} else rh.style.opacity=0;
+ // chip label
+ const chip=$('chip');
+ let chipText='',cu=0;
+ if(si===3){chipText='프라이머 (바탕 잡기)';cu=cl(lt/0.2)}
+ if(si===4){chipText='탄성코트 1차';cu=cl(lt/0.2)}
+ if(si===5&&lt>DUR[5]*0.5){chipText='탄성코트 2차';cu=cl((lt-DUR[5]*0.5)/0.2)}
+ if(si===5&&lt<=DUR[5]*0.5){chipText='충분히 건조';cu=cl(lt/0.2)}
+ chip.textContent=chipText;chip.style.opacity=(si>=3&&si<=5)?cu:0;
+ // ---- S4 coat1: vertical roller zigzag over 6 columns
+ const rv=$('rollV');
+ const span=DUR[4]-0.5;let c1=cl((t-t4-0.2)/span);
+ COLS.forEach((c,i)=>{const u=cl(c1*NC-i);const down=(i%2===0);const e=eio(u);c.style.clipPath=down?`inset(0 0 ${100-e*100}% 0)`:`inset(${100-e*100}% 0 0 0)`;});
+ if(t>=t4&&t<t5){const f=c1*NC;const i=Math.min(NC-1,Math.floor(f));const u=eio(cl(f-i));const down=(i%2===0);
+  const y=down?lerp(-100,860-520+0,u)-0:lerp(860-520,-100,u);rr(rv,i*160+15,y,0,cl((t-t4)/0.2)*(1-cl((t-(t5-0.2))/0.2)));} else rv.style.opacity=0;
+ // wet/dry look of coat1 during S5
+ const wet=(t>=t5)?1-eo((t-t5-0.2)/(DUR[5]*0.45)):1;COLS.forEach(c=>c.style.background=wet>0.01?`rgb(${Math.round(lerp(236,222,wet))},${Math.round(lerp(230,214,wet))},${Math.round(lerp(216,198,wet))})`:'#ece6d8');
+ // sun
+ const sun=$('sun');const su=(si===5&&lt<DUR[5]*0.55)?cl(lt/0.25):0;sun.style.opacity=su;$('sunr').setAttribute('transform',`rotate(${t*60})`);
+ // ---- S5 coat2 after drying
+ const rh2=$('rollH2'),c2=$('coat2');const st5=t5+DUR[5]*0.5;const u5=eio((t-st5)/(DUR[5]*0.42));
+ c2.style.clipPath=`inset(0 0 ${100-u5*100}% 0)`;
+ if(t>=st5&&t<t6){rr(rh2,0,-110+u5*(860+110),0,cl((t-st5)/0.15)*(1-cl((t-(t6-0.2))/0.2)));} else rh2.style.opacity=0;
+ // ---- S6 sparkles
+ for(let k=1;k<=5;k++){const e=$('sp'+k);const u=si>=6?cl((t-t6-0.3-k*0.12)/0.3):0;const pulse=0.5+0.5*Math.sin(t*6+k*1.7);e.style.opacity=si===6?u*(0.5+0.5*pulse):0;e.style.transform=`scale(${.6+.6*pulse})`}
+ // ---- S7 DM
+ const du=back((t-t7-0.2)/0.5);$('dm').style.opacity=t>t7?cl((t-t7)/0.15):0;$('dm').style.transform=`scale(${.5+.5*du+0.03*Math.sin(t*7)})`;
+ $('c').style.background=si===7?'#161d0c':'#111';
+}
+let T=0;window.__step=(s=1/30)=>{T+=s;render(T);return T};render(0);
+</script></body></html>
