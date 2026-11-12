@@ -1,0 +1,7 @@
+{
+  "name": "dawn-bakery",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "typecheck": "tsc -p tsconfig.json" },
+  "devDependencies": { "@types/node": "^22.18.0", "typescript": "^5.9.3", "vite": "^7.1.9" }
+}
