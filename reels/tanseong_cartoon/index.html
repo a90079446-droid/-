@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>탄성코트 시공 3D 카툰</title>
+<style>
+@font-face{font-family:P;src:url(Pretendard-Black.otf);font-weight:900}
+html,body{margin:0;background:#101424}
+#c{position:relative;width:1080px;height:1920px;overflow:hidden;background:#101424;font-family:P,sans-serif;font-weight:900;color:#fff}
+#c *{box-sizing:border-box}
+#gl{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.abs{position:absolute}
+#pill{left:50%;top:110px;transform:translateX(-50%);font-size:44px;background:#C8FF2E;color:#111;border-radius:60px;padding:10px 38px;white-space:nowrap}
+#big{left:0;width:1080px;top:205px;text-align:center;font-size:150px;letter-spacing:-4px;line-height:1.1;white-space:nowrap;text-shadow:0 8px 0 rgba(0,0,0,.5),0 0 40px rgba(0,0,0,.4)}
+#big span{display:inline-block}
+.cap{left:60px;width:960px;top:1500px;text-align:center;font-size:76px;line-height:1.28;letter-spacing:-1.5px;opacity:0;text-shadow:0 5px 0 rgba(0,0,0,.7),0 0 30px rgba(0,0,0,.6)}
+.cap b{color:#C8FF2E;font-weight:900}
+.cap i{font-style:normal;display:inline-block;opacity:0;margin:0 .13em}
+#chip{left:50%;transform:translateX(-50%);top:470px;font-size:54px;background:#fff;color:#111;border-radius:60px;padding:10px 40px;opacity:0;white-space:nowrap}
+#prog{left:60px;top:1800px;width:960px;height:14px;display:flex;gap:10px}
+#prog div{flex:1;background:#2a2f45;border-radius:7px;overflow:hidden}
+#prog div i{display:block;height:100%;width:0;background:#C8FF2E}
+#dm{left:290px;top:560px;width:380px;height:380px;border-radius:50%;background:#C8FF2E;color:#111;font-size:160px;line-height:380px;text-align:center;opacity:0}
+</style></head><body>
+<div id="c">
+ <canvas id="gl" width="1080" height="1920"></canvas>
+ <div class="abs" id="pill">BEFORE</div>
+ <div class="abs" id="big"></div>
+ <div class="abs" id="chip"></div>
+ <div class="abs" id="dm">DM</div>
+ <div id="caps"></div>
+ <div class="abs" id="prog"></div>
+</div>
+<svg id="meas" width="0" height="0" style="position:absolute"></svg>
+<script type="module">
+import * as THREE from './lib/three.module.js';
+const V3=THREE.Vector3;
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eo=x=>1-Math.pow(1-cl(x),3), eio=x=>{x=cl(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
+const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const lerp=(a,b,t)=>a+(b-a)*t, sm=(a,b,x)=>{const t=cl((x-a)/(b-a));return t*t*(3-2*t)};
+// ---------- timeline
+const AUD=[3.32,3.71,3.16,3.24,4.05,3.16,4.36,3.55];
+const DUR=AUD.map(a=>a+0.35);const ST=[];let acc=0.3;DUR.forEach(d=>{ST.push(acc);acc+=d});
+window.TOTAL=acc+0.5;window.STARTS=ST;window.DURS=DUR;
+const SC=[
+ ['BEFORE','곰팡이 벽','곰팡이 핀 **베란다** 벽, 이렇게 고쳐요.'],
+ ['STEP 1 / 6','긁어내기','먼저 **곰팡이**랑 들뜬 **페인트**를 싹 긁어내요.'],
+ ['STEP 2 / 6','균열 메우기','갈라진 **틈**은 **퍼티**로 꼼꼼하게 메워요.'],
+ ['STEP 3 / 6','프라이머','**프라이머**를 발라서 **바탕**을 단단하게 잡아요.'],
+ ['STEP 4 / 6','탄성코트 1차','**탄성코트** 1차, **롤러**로 골고루 밀어요.'],
+ ['STEP 5 / 6','건조 + 2차','충분히 **말린** 뒤에 **2차**를 한 번 더 발라요.'],
+ ['STEP 6 / 6','완성!','**마감**까지 끝나면, **깨끗하고 튼튼한** 벽 완성!'],
+ ['공짜','무료 상담','우리 집 벽 상태가 궁금하면, **DM** 주세요.']
+];
+// ---------- overlay DOM
+const capsEl=$('caps');const CAPS=SC.map((s)=>{const d=document.createElement('div');d.className='abs cap';capsEl.appendChild(d);const spans=s[2].split(' ').map(w=>{const sp=document.createElement('i');if(w.includes('**'))sp.innerHTML='<b>'+w.replace(/\*\*/g,'')+'</b>';else sp.textContent=w;d.appendChild(sp);return sp});return {d,spans}});
+const prog=$('prog');for(let i=0;i<6;i++){const s=document.createElement('div');s.innerHTML='<i></i>';prog.appendChild(s)}
+const bigEl=$('big');let lastTitle=-1;
+function setTitle(i){if(i===lastTitle)return;lastTitle=i;bigEl.innerHTML='';[...SC[i][1]].forEach(ch=>{const s=document.createElement('span');s.textContent=ch===' '?' ':ch;bigEl.appendChild(s)});$('pill').textContent=SC[i][0]}
+// ---------- Canvas 2D wall texture
+const WW=960,WH=860;const cv=document.createElement('canvas');cv.width=WW;cv.height=WH;const ctx=cv.getContext('2d');
+const SP=[[150,150,280],[700,110,300],[400,380,320],[780,470,260],[160,620,300],[560,690,280],[880,240,220]];
+const CRD=['M170 0 L205 140 L160 270 L230 420 L195 560','M740 90 L695 230 L760 350 L725 500 L790 650','M430 480 L490 570 L455 690 L520 810'];
+const meas=$('meas');const CRP=CRD.map(d=>{const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);meas.appendChild(p);return {p,L:p.getTotalLength(),path2d:new Path2D(d)}});
+const grain=document.createElement('canvas');grain.width=256;grain.height=256;{const g=grain.getContext('2d');const id=g.createImageData(256,256);let s=7;for(let i=0;i<id.data.length;i+=4){s=(s*16807)%2147483647;const v=200+(s%55);id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=26}g.putImageData(id,0,0)}
+const grainPat=ctx.createPattern(grain,'repeat');
+const NC=6;
+// layer helper: column zig-zag; returns reveal state
+function layer(t,t0,span){const c=cl((t-t0)/span);const f=c*NC,i=Math.min(NC-1,Math.floor(f)),u=eio(cl(f-i));const down=i%2===0;return {c,i,u,down,y:down?u*WH:(1-u)*WH,x:i*160+80}}
+function paintLayer(color,t,t0,span){const L=layer(t,t0,span);if(L.c<=0)return L;ctx.fillStyle=color;for(let i=0;i<NC;i++){const e=eio(cl(L.c*NC-i));if(e<=0)continue;if(i%2===0)ctx.fillRect(i*160,0,161,e*WH);else ctx.fillRect(i*160,(1-e)*WH,161,e*WH)}return L}
+function drawWall(t){
+ const [t1,t2,t3,t4,t5,t6]=ST.slice(1,7);
+ ctx.fillStyle='#d8d2c4';ctx.fillRect(0,0,WW,WH);
+ const arr=SP.map((_,i)=>t1+0.25+i*(DUR[1]*0.82/SP.length));
+ SP.forEach(([x,y,s],i)=>{const g=eo((t-0.3-i*0.12)/0.9),rm=eo((t-arr[i])/0.3),a=g*(1-rm);if(a<=0.005)return;const r=s/2*(0.7+0.3*g);const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,`rgba(20,24,16,${.95*a})`);gr.addColorStop(.4,`rgba(30,36,24,${.75*a})`);gr.addColorStop(.7,'rgba(30,36,24,0)');gr.addColorStop(1,'rgba(30,36,24,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill()});
+ ctx.lineCap='round';ctx.lineJoin='round';
+ CRP.forEach((c,i)=>{const u=eo((t-(t1+DUR[1]*0.55+i*0.25))/0.7);if(u<=0)return;ctx.strokeStyle='#3a3a30';ctx.lineWidth=i===2?8:9;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-u);ctx.stroke(c.path2d)});
+ const n=CRP.length,each=(DUR[2]-0.3)/n;const ki=Math.max(0,Math.min(n-1,Math.floor((t-t2-0.1)/each)));const kl=cl((t-t2-0.1-ki*each)/each);
+ CRP.forEach((c,i)=>{let uu=0;if(t>=t3)uu=1;else if(t>=t2)uu=i<ki?1:(i===ki?eio(kl):0);if(uu<=0)return;ctx.strokeStyle='#f5f0e4';ctx.lineWidth=i===2?20:22;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-uu);ctx.stroke(c.path2d)});
+ ctx.setLineDash([]);
+ const LP=paintLayer('#dfeaf4',t,t3+0.25,DUR[3]-0.7);
+ const wet=(t>=t5)?1-eo((t-t5-0.2)/(DUR[5]*0.45)):1;
+ const cc=`rgb(${Math.round(lerp(236,222,wet))},${Math.round(lerp(230,214,wet))},${Math.round(lerp(216,198,wet))})`;
+ const L1=paintLayer(cc,t,t4+0.2,DUR[4]-0.5);
+ const st5=t5+DUR[5]*0.5;const L2=paintLayer('#f6f2ea',t,st5,DUR[5]*0.42);
+ ctx.fillStyle=grainPat;ctx.fillRect(0,0,WW,WH);
+ return {arr,ki,kl,LP,L1,L2,st5};
+}
+// ---------- Three scene
+const R=new THREE.WebGLRenderer({canvas:$('gl'),antialias:true,preserveDrawingBuffer:true});R.setPixelRatio(1);R.setSize(1080,1920,false);
+R.outputColorSpace=THREE.SRGBColorSpace;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+const sky=new THREE.Color(0x1d2748);scene.background=sky.clone();
+const cam=new THREE.PerspectiveCamera(48,1080/1920,0.1,80);
+const key=new THREE.DirectionalLight(0xfff3df,2.4);key.position.set(5,8,6);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-7,right:7,top:7,bottom:-7,near:1,far:30});key.shadow.bias=-0.0005;scene.add(key);
+scene.add(new THREE.HemisphereLight(0xeef2ff,0x5a4a3a,1.4));
+const sunLight=new THREE.PointLight(0xffd23d,0,16);scene.add(sunLight);
+// toon helpers
+const grad=new THREE.DataTexture(Uint8Array.from([110,190,255]),3,1,THREE.RedFormat);grad.minFilter=grad.magFilter=THREE.NearestFilter;grad.needsUpdate=true;
+const toon=c=>new THREE.MeshToonMaterial({color:c,gradientMap:grad});
+const OUTM=new THREE.MeshBasicMaterial({color:0x1b1410,side:THREE.BackSide});
+function ob(geo,color,parent,thick=1.06){const m=new THREE.Mesh(geo,toon(color));const o=new THREE.Mesh(geo,OUTM);o.scale.setScalar(thick);m.add(o);m.castShadow=true;if(parent)parent.add(m);return m}
+const CS=0.95,F=-WH/150/2;// floor y
+// wall
+const WW3=WW/150,WH3=WH/150;
+const wallG=new THREE.Group();wallG.rotation.y=Math.PI/2;scene.add(wallG);
+const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;
+const plaster=new THREE.MeshStandardMaterial({color:0xd9d2c2,roughness:.95});
+const front=new THREE.MeshStandardMaterial({map:tex,roughness:.92,bumpMap:tex,bumpScale:0.5,emissive:0xffffff,emissiveMap:tex,emissiveIntensity:0.4});
+const slab=new THREE.Mesh(new THREE.BoxGeometry(WW3,WH3,0.5),[plaster,plaster,plaster,plaster,front,plaster]);slab.position.z=-0.25;slab.castShadow=true;slab.receiveShadow=true;wallG.add(slab);
+const bb=new THREE.Mesh(new THREE.BoxGeometry(WW3+0.2,0.35,0.16),new THREE.MeshStandardMaterial({color:0xf5f2ea,roughness:.6}));bb.position.set(0,-WH3/2+0.18,0.07);bb.castShadow=true;wallG.add(bb);
+// floor (wood boards)
+const fc=document.createElement('canvas');fc.width=512;fc.height=512;{const g=fc.getContext('2d');g.fillStyle='#b98a55';g.fillRect(0,0,512,512);for(let i=0;i<8;i++){g.fillStyle=i%2?'#c39561':'#ad7f4b';g.fillRect(0,i*64,512,62);g.fillStyle='rgba(0,0,0,.18)';g.fillRect(0,i*64+62,512,2)}}
+const ftex=new THREE.CanvasTexture(fc);ftex.colorSpace=THREE.SRGBColorSpace;ftex.wrapS=ftex.wrapT=THREE.RepeatWrapping;ftex.repeat.set(4,4);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({map:ftex,roughness:.8}));floor.rotation.x=-Math.PI/2;floor.position.y=F;floor.receiveShadow=true;scene.add(floor);
+// paint bucket prop
+const bucket=ob(new THREE.CylinderGeometry(.55,.48,.8,24),0xdfe3e8,scene);bucket.position.set(2.2,F+.4,-3.6);const bl=ob(new THREE.CylinderGeometry(.56,.56,.35,24),0x2f6fdb,bucket,1.03);bl.position.y=.0;
+// ---------- the worker (cartoon)
+const root=new THREE.Group();scene.add(root);const upper=new THREE.Group();root.add(upper);
+const SKIN=0xffcf9f,SHIRT=0xffd23d,OVER=0x2f6fdb,BOOT=0x3a2a20,GLOVE=0xff7a2a;
+const torsoLow=ob(new THREE.CapsuleGeometry(.5*CS,.45*CS,6,18),OVER,upper);torsoLow.position.y=.45*CS;
+const torsoUp=ob(new THREE.CapsuleGeometry(.47*CS,.4*CS,6,18),SHIRT,upper);torsoUp.position.y=1.15*CS;
+const bibA=ob(new THREE.BoxGeometry(.7*CS,.55*CS,.16*CS),OVER,upper,1.04);bibA.position.set(0,1.0*CS,.42*CS);
+const pocket=ob(new THREE.BoxGeometry(.3*CS,.22*CS,.05*CS),0x2459b5,upper,1.05);pocket.position.set(0,1.1*CS,.52*CS);
+const headG=new THREE.Group();headG.position.y=2.25*CS;upper.add(headG);
+const head=ob(new THREE.SphereGeometry(.86*CS,32,24),SKIN,headG);
+const hatD=ob(new THREE.SphereGeometry(.92*CS,32,16,0,Math.PI*2,0,Math.PI/2),SHIRT,headG);hatD.position.y=.18*CS;
+const brim=ob(new THREE.CylinderGeometry(.98*CS,.98*CS,.09*CS,32),0xf0b400,headG);brim.position.y=.18*CS;
+const visor=ob(new THREE.BoxGeometry(.9*CS,.07*CS,.55*CS),0xf0b400,headG,1.05);visor.position.set(0,.2*CS,.82*CS);
+const ridge=ob(new THREE.BoxGeometry(.16*CS,.12*CS,1.7*CS),0xf0b400,headG,1.04);ridge.position.set(0,1.03*CS,0);
+const eyeL=[],pupL=[];for(const sx of[-1,1]){const e=new THREE.Mesh(new THREE.SphereGeometry(.2*CS,16,12),new THREE.MeshToonMaterial({color:0xffffff,gradientMap:grad}));e.scale.z=.5;e.position.set(sx*.3*CS,-.02*CS,.76*CS);headG.add(e);const p=new THREE.Mesh(new THREE.SphereGeometry(.11*CS,12,10),new THREE.MeshBasicMaterial({color:0x1a1208}));p.position.set(sx*.3*CS,-.02*CS,.84*CS);headG.add(p);eyeL.push(e);pupL.push(p);
+ const br=new THREE.Mesh(new THREE.BoxGeometry(.3*CS,.07*CS,.06*CS),new THREE.MeshBasicMaterial({color:0x4a2d14}));br.position.set(sx*.3*CS,.27*CS,.8*CS);br.rotation.z=-sx*.18;headG.add(br);
+ const ch=new THREE.Mesh(new THREE.SphereGeometry(.14*CS,12,10),new THREE.MeshBasicMaterial({color:0xff9a8a}));ch.scale.set(1,.7,.4);ch.position.set(sx*.52*CS,-.3*CS,.64*CS);headG.add(ch);
+ const ear=ob(new THREE.SphereGeometry(.17*CS,12,10),SKIN,headG,1.08);ear.position.set(sx*.84*CS,-.05*CS,0)}
+const smile=new THREE.Mesh(new THREE.TorusGeometry(.26*CS,.045*CS,8,20,Math.PI),new THREE.MeshBasicMaterial({color:0x7a2a1a}));smile.rotation.z=Math.PI;smile.position.set(0,-.28*CS,.8*CS);headG.add(smile);
+const nose=new THREE.Mesh(new THREE.SphereGeometry(.12*CS,12,10),new THREE.MeshToonMaterial({color:0xf0b88a,gradientMap:grad}));nose.position.set(0,-.1*CS,.86*CS);headG.add(nose);
+// limbs (world-space cylinders)
+const UNIT=new V3(0,1,0);
+function seg(r,color){const m=ob(new THREE.CylinderGeometry(r,r,1,14),color,scene,1.1);return m}
+const armSeg={R:[seg(.2*CS,SHIRT),seg(.17*CS,SKIN)],L:[seg(.2*CS,SHIRT),seg(.17*CS,SKIN)]};
+const legSeg=[[seg(.26*CS,OVER),seg(.24*CS,OVER)],[seg(.26*CS,OVER),seg(.24*CS,OVER)]];
+const hands={R:ob(new THREE.SphereGeometry(.27*CS,16,12),GLOVE,scene),L:ob(new THREE.SphereGeometry(.27*CS,16,12),GLOVE,scene)};
+const shoul={R:ob(new THREE.SphereGeometry(.24*CS,14,12),SHIRT,scene),L:ob(new THREE.SphereGeometry(.24*CS,14,12),SHIRT,scene)};
+const knees=[ob(new THREE.SphereGeometry(.25*CS,12,10),OVER,scene),ob(new THREE.SphereGeometry(.25*CS,12,10),OVER,scene)];
+const boots=[ob(new THREE.CapsuleGeometry(.24*CS,.5*CS,4,10),BOOT,scene),ob(new THREE.CapsuleGeometry(.24*CS,.5*CS,4,10),BOOT,scene)];
+function place(m,a,b){const d=new V3().subVectors(b,a);const L=d.length();m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(UNIT,d.clone().normalize());m.scale.set(1,L,1)}
+function ik(a,t,l1,l2,pole){const d=new V3().subVectors(t,a);let D=d.length();const u=d.clone().divideScalar(D||1);D=Math.min(D,l1+l2-0.001);const x=(l1*l1-l2*l2+D*D)/(2*D);const h=Math.sqrt(Math.max(0,l1*l1-x*x));const pp=pole.clone().sub(u.clone().multiplyScalar(pole.dot(u))).normalize();const el=a.clone().addScaledVector(u,x).addScaledVector(pp,h);const end=a.clone().addScaledVector(u,D);return [el,end]}
+// ---------- tools
+const mat=(c,m=0.2,r=.4)=>new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r});
+function mkScraper(){const g=new THREE.Group();const h=ob(new THREE.CylinderGeometry(.12,.14,1.5,16),0x9a6a35,g);h.rotation.z=Math.PI/2;h.position.x=-1.2;const f=ob(new THREE.BoxGeometry(.4,.28,.28),0x555d66,g);f.position.x=-.45;const b=ob(new THREE.BoxGeometry(.95,.8,.05),0xc9cfd6,g,1.04);b.position.x=0;return g}
+function mkKnife(){const g=new THREE.Group();const h=ob(new THREE.CylinderGeometry(.12,.14,1.2,16),0xff8a3d,g);h.rotation.z=Math.PI/2;h.position.x=-1.0;const b=ob(new THREE.BoxGeometry(1.15,.5,.04),0xe3e7ec,g,1.04);b.position.x=0;return g}
+function mkRoller(color){const g=new THREE.Group();const s=ob(new THREE.CylinderGeometry(.3,.3,1.15,28),color,g,1.05);s.rotation.z=Math.PI/2;const cap1=ob(new THREE.CylinderGeometry(.16,.16,1.35,12),0x7b828c,g,1.05);cap1.rotation.z=Math.PI/2;cap1.position.set(0,.0,.0);const pole=ob(new THREE.CylinderGeometry(.07,.07,3.3,10),0x2d3340,g,1.1);pole.position.set(0,1.3,1.3);pole.rotation.x=Math.PI/4.4*-1;pole.rotation.x=-0.7;const gr=ob(new THREE.CylinderGeometry(.11,.11,1.0,12),0xff6a1f,g,1.08);gr.position.set(0,2.15,2.15);gr.rotation.x=-0.7;return g}
+const scraper=mkScraper(),knife=mkKnife(),rollP=mkRoller(0x7fb6f0),rollC1=mkRoller(0xffa56a),rollC2=mkRoller(0xffd2ad);
+[scraper,knife,rollP,rollC1,rollC2].forEach(o=>{o.visible=false;scene.add(o)});
+const deb=new THREE.InstancedMesh(new THREE.BoxGeometry(.14,.14,.14),mat(0x7a705f,0,.9),SP.length*8);deb.castShadow=true;scene.add(deb);const dm4=new THREE.Object3D();
+const sun=new THREE.Mesh(new THREE.SphereGeometry(.6,32,32),new THREE.MeshBasicMaterial({color:0xffd23d}));sun.visible=false;scene.add(sun);
+const rays=new THREE.Group();for(let i=0;i<10;i++){const r=new THREE.Mesh(new THREE.BoxGeometry(.14,.5,.05),new THREE.MeshBasicMaterial({color:0xffd23d}));const a=i/10*Math.PI*2;r.position.set(Math.cos(a)*1.0,Math.sin(a)*1.0,0);r.rotation.z=a-Math.PI/2;rays.add(r)}sun.add(rays);
+const SPK=[];for(let i=0;i<10;i++){const m=new THREE.Mesh(new THREE.OctahedronGeometry(.17),new THREE.MeshBasicMaterial({color:0xffe27a}));m.visible=false;scene.add(m);SPK.push(m)}
+const W=(px,py,z=0)=>wallG.localToWorld(new V3((px-WW/2)/150,(WH/2-py)/150,z));
+// camera keyframes
+const CAMA=[0.75,0.95,0.55,0.95,0.6,0.85,0.7,0.75],CAMD=[19.5,17.2,17.2,17.5,17.0,18.0,18.6,20],CAMH=[1.5,1.3,0.9,0.8,1.6,1.6,1.0,1.0];
+const lastCz={v:0};
+function render(t){
+ let si=0;ST.forEach((s,i)=>{if(t>=s)si=i});const lt=t-ST[si];setTitle(si);
+ [...bigEl.children].forEach((sp,k)=>{const u=back((lt-k*0.045)/0.45);sp.style.transform=`translateY(${(1-u)*70}px) scale(${.6+.4*u})`;sp.style.opacity=cl((lt-k*0.045)/0.15);sp.style.color=(si>=1&&si<=6)?'#fff':'#C8FF2E'});
+ const pu=back(lt/0.4);$('pill').style.transform=`translateX(-50%) scale(${.6+.4*pu})`;$('pill').style.opacity=cl(lt/0.15);
+ CAPS.forEach((c,i)=>{const on=i===si;c.d.style.opacity=on?1:0;if(on)c.spans.forEach((sp,k)=>{const at=0.1+(k/c.spans.length)*AUD[i]*0.85;const u=eo((lt-at)/0.2);sp.style.opacity=u;sp.style.transform=`translateY(${(1-u)*24}px)`})});
+ [...prog.children].forEach((p,i)=>{p.firstChild.style.width=cl((t-ST[i+1])/DUR[i+1])*100+'%'});
+ prog.style.opacity=(si>=1&&si<=6)?1:0;
+ const S=drawWall(t);tex.needsUpdate=true;
+ const [t1,t2,t3,t4,t5,t6,t7]=ST.slice(1);
+ // ---- tools & targets
+ let toolTip=null,grips=null,active=null;
+ const tilt=(o,x,y,z)=>{o.rotation.set(x,y,z)};
+ [scraper,knife,rollP,rollC1,rollC2].forEach(o=>o.visible=false);
+ if(t>=t1-0.1&&t<t2){const wp=[[-80,40]].concat(SP.map(([x,y])=>[x-90,y-40]));const ts=[t1-0.1].concat(S.arr);let q=0;for(let i=0;i<ts.length-1;i++)if(t>=ts[i])q=i;const a=wp[q],b=wp[Math.min(q+1,wp.length-1)];const u=eio((t-ts[q])/((ts[Math.min(q+1,ts.length-1)]-ts[q])||1));const scrub=(t>ts[1])?Math.sin(t*26)*16:0;
+  scraper.position.copy(W(lerp(a[0],b[0],u)+250+scrub,lerp(a[1],b[1],u)+60,.4));tilt(scraper,0,Math.PI,0.35+Math.sin(t*26)*0.05);scraper.visible=true;active=scraper;grips=[new V3(-1.2,0,0),new V3(-.55,.0,0)];}
+ else if(t>=t2&&t<t3){const c=CRP[S.ki];const pos=c.p.getPointAtLength(c.L*eio(S.kl));knife.position.copy(W(pos.x+70,pos.y+15,.4));tilt(knife,0,Math.PI,0.3);knife.visible=true;active=knife;grips=[new V3(-1.0,0,0),new V3(-.4,0,0)]}
+ else{const Ls=[[t3+0.25,DUR[3]-0.7,S.LP,rollP,t4],[t4+0.2,DUR[4]-0.5,S.L1,rollC1,S.st5-0.0001+ (t5-S.st5)],[S.st5,DUR[5]*0.42,S.L2,rollC2,t6]];
+  const wins=[[t3,t4,S.LP,rollP],[t4,t5,S.L1,rollC1],[S.st5,t6,S.L2,rollC2]];for(const [a,b,L,r] of wins){if(t>=a&&t<b){r.position.copy(W(L.x,L.y,.45));r.rotation.set(0,Math.PI/2,0);r.visible=true;active=r;grips=[new V3(0,2.4,2.4),new V3(0,1.35,1.35)]}}}
+ // debris
+ for(let i=0;i<SP.length;i++)for(let j=0;j<8;j++){const u=(t-S.arr[i])/0.9,idx=i*8+j;if(u>0&&u<1){const ang=j/8*Math.PI*2+i,sp=1.3+j*.18;const v=W(SP[i][0]+Math.cos(ang)*sp*90*u,SP[i][1]+Math.sin(ang)*sp*70*u,.25+Math.sin(u*3)*.6);v.y-=u*u*1.6;dm4.position.copy(v);dm4.rotation.set(u*9+j,u*7,0);dm4.scale.setScalar(1-u)}else{dm4.position.set(0,-50,0);dm4.scale.setScalar(0.0001)}dm4.updateMatrix();deb.setMatrixAt(idx,dm4.matrix)}deb.instanceMatrix.needsUpdate=true;
+ // ---- worker pose
+ let gR=null,gL=null,cz=0.8,crouch=0,lean=0.08,jump=0;
+ if(active){active.updateMatrixWorld(true);gR=active.localToWorld(grips[0].clone());gL=active.localToWorld(grips[1].clone());cz=gR.z-1.1;const hy=gR.y;crouch=cl((0.1-(hy-1.6))/3.4,0,1)*1.15*CS;lean=0.12+0.2*cl(crouch/1.2);if(active===scraper||active===knife){cz=gR.z-1.1;}}
+ else{const idle=si===0?1:0;cz=lerp(0.8,0.4,0)+Math.sin(t*1.4)*0.05;}
+ // smooth cz between targets using last value (deterministic: ease from scene start)
+ const hipY=1.75*CS-crouch;
+ const rx=2.65;
+ // walking feet
+ const moving=Math.min(1,Math.abs(cz-lastCz.v)*40);lastCz.v=cz;
+ root.position.set(rx,F,cz);root.rotation.y=-Math.PI/2+ (si===0||si===7?0.35:0);
+ upper.position.y=hipY;upper.rotation.x=lean;
+ // celebrate / wave states
+ const wave=(si===0||si===7);const cheer=(si===6);
+ let jy=0;if(cheer){jy=Math.abs(Math.sin((t-t6)*5))*0.5;}
+ root.position.y=F+jy;
+ root.updateMatrixWorld(true);
+ const hipL=root.localToWorld(new V3(-.3*CS,hipY,0)),hipR=root.localToWorld(new V3(.3*CS,hipY,0));
+ const footBase=[new V3(rx-0.1,F+.28*CS,cz-.45),new V3(rx+0.1,F+.28*CS,cz+.45)];
+ const ph=cz*2.4;
+ [0,1].forEach(k=>{const f=footBase[k].clone();if(!cheer){f.z+=Math.sin(ph+k*Math.PI)*0.2*moving;f.y+=Math.max(0,Math.cos(ph+k*Math.PI))*0.22*moving}else f.y+=jy*0.9;
+  const hp=k===0?hipL:hipR;const [kn,an]=ik(hp,f,1.05*CS,1.05*CS,new V3(-1,0.1,0));place(legSeg[k][0],hp,kn);place(legSeg[k][1],kn,an);knees[k].position.copy(kn);boots[k].position.copy(an).add(new V3(-.22*CS,-.1*CS,0));boots[k].rotation.set(0,0,Math.PI/2);boots[k].rotation.order='YXZ';boots[k].rotation.set(Math.PI/2,0,Math.PI/2)});
+ // arms
+ const shR=upper.localToWorld(new V3(.64*CS,1.55*CS,0)),shL=upper.localToWorld(new V3(-.64*CS,1.55*CS,0));
+ let tR,tL;
+ if(gR){tR=gR;tL=gL}
+ else if(wave){const w=Math.sin(t*9)*0.35;tR=upper.localToWorld(new V3(.9*CS,3.1*CS,.2*CS+w*CS));tL=upper.localToWorld(new V3(-.75*CS,.35*CS,.3*CS))}
+ else if(cheer){const w=Math.sin(t*10)*0.25;tR=upper.localToWorld(new V3(.8*CS,3.5*CS,.1*CS));tL=upper.localToWorld(new V3(-.8*CS,3.5*CS+w,.1*CS))}
+ else{tR=upper.localToWorld(new V3(.75*CS,.4*CS,.3*CS));tL=upper.localToWorld(new V3(-.75*CS,.4*CS,.3*CS))}
+ const aL=1.05*CS;
+ [[shR,tR,'R',new V3(0.2,-1,0.6)],[shL,tL,'L',new V3(0.2,-1,-0.6)]].forEach(([sh,tg,k,pole])=>{const [el,en]=ik(sh,tg,aL,aL,pole);place(armSeg[k][0],sh,el);place(armSeg[k][1],el,en);hands[k].position.copy(en);shoul[k].position.copy(sh)});
+ // head look: toward the work / camera
+ headG.rotation.y=wave||cheer?0.9:0.95;headG.rotation.x=active?0.12:0;
+ const talk=Math.abs(Math.sin(t*10));smile.scale.y=(si===7||si===0)?0.8+0.5*talk:1;
+ // tool actually in hand: pull the tool onto the gripped hand (keeps both consistent)
+ // ---- sun & sparkles
+ const sOn=(si===5&&lt<DUR[5]*0.55);sun.visible=sOn;sunLight.intensity=sOn?70*cl(lt/0.25):0;if(sOn){sun.position.copy(W(790,110,1.6));sun.scale.setScalar(cl(lt/0.25));rays.rotation.z=t*1.2;sunLight.position.copy(sun.position)}
+ SPK.forEach((m,j)=>{const u=si===6?cl((t-t6-0.3-j*0.1)/0.3):0;const pulse=.5+.5*Math.sin(t*6+j*1.7);m.visible=u>0;if(u>0){const a=j/10*Math.PI*2;m.position.copy(W(480+Math.cos(a)*400,430+Math.sin(a*1.7)*330,.5+Math.sin(j)*.3));m.scale.setScalar((.6+1.1*pulse)*u);m.rotation.set(t*2+j,t*3,0)}});
+ // chip + dm
+ let chipText='',cu=0;if(si===1){chipText='스크래퍼로 긁기';cu=cl(lt/0.2)}if(si===2){chipText='퍼티 칼로 메우기';cu=cl(lt/0.2)}if(si===3){chipText='프라이머 (바탕 잡기)';cu=cl(lt/0.2)}if(si===4){chipText='탄성코트 1차';cu=cl(lt/0.2)}if(si===5){const mid=DUR[5]*0.5;chipText=lt>mid?'탄성코트 2차':'충분히 건조';cu=cl((lt>mid?lt-mid:lt)/0.2)}
+ $('chip').textContent=chipText;$('chip').style.opacity=(si>=1&&si<=5)?cu:0;
+ const du=back((t-t7-0.25)/0.5);$('dm').style.opacity=t>t7+0.1?cl((t-t7-0.1)/0.15):0;$('dm').style.transform=`scale(${.5+.5*du+0.03*Math.sin(t*7)})`;
+ // camera
+ const k=Math.min(si,7),k0=Math.max(0,k-1),w=eio(lt/1.0);
+ const ang=lerp(CAMA[k0],CAMA[k],w)+Math.sin(t*0.7)*0.04,dist=lerp(CAMD[k0],CAMD[k],w)-lt*0.1,hh=lerp(CAMH[k0],CAMH[k],w);
+ cam.position.set(Math.sin(ang)*dist,hh+1.0,Math.cos(ang)*dist);cam.lookAt(0.9,0.2,0);
+ R.render(scene,cam);
+}
+let T=0;window.__step=(s=1/30)=>{T+=s;render(T);return T};window.__render=render;
+document.fonts.ready.then(()=>{render(0);window.__ready=true});
+</script></body></html>
