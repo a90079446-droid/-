@@ -38,17 +38,17 @@ const eo=x=>1-Math.pow(1-cl(x),3), eio=x=>{x=cl(x);return x<.5?2*x*x:1-Math.pow(
 const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
 const lerp=(a,b,t)=>a+(b-a)*t, sm=(a,b,x)=>{const t=cl((x-a)/(b-a));return t*t*(3-2*t)};
 // ---------- timeline
-const AUD=[3.32,3.71,3.16,3.24,4.05,3.16,4.36,3.55];
+const AUD=[3.32,4.36,3.00,3.16,4.91,4.60,3.97,3.55];
 const DUR=AUD.map(a=>a+0.35);const ST=[];let acc=0.3;DUR.forEach(d=>{ST.push(acc);acc+=d});
 window.TOTAL=acc+0.5;window.STARTS=ST;window.DURS=DUR;
 const SC=[
  ['BEFORE','곰팡이 벽','곰팡이 핀 **베란다** 벽, 이렇게 고쳐요.'],
- ['STEP 1 / 6','긁어내기','먼저 **곰팡이**랑 들뜬 **페인트**를 싹 긁어내요.'],
- ['STEP 2 / 6','균열 메우기','갈라진 **틈**은 **퍼티**로 꼼꼼하게 메워요.'],
- ['STEP 3 / 6','프라이머','**프라이머**를 발라서 **바탕**을 단단하게 잡아요.'],
- ['STEP 4 / 6','탄성코트 1차','**탄성코트** 1차, **롤러**로 골고루 밀어요.'],
- ['STEP 5 / 6','건조 + 2차','충분히 **말린** 뒤에 **2차**를 한 번 더 발라요.'],
- ['STEP 6 / 6','완성!','**마감**까지 끝나면, **깨끗하고 튼튼한** 벽 완성!'],
+ ['STEP 1 / 6','비닐 보양','먼저 **비닐**로 베란다 **출입문**과 **바닥**을 꼼꼼하게 막아요.'],
+ ['STEP 2 / 6','긁어내기','**곰팡이**랑 들뜬 **페인트**는 싹 긁어내요.'],
+ ['STEP 3 / 6','균열 메우기','갈라진 **틈**은 **퍼티**로 꼼꼼하게 메워요.'],
+ ['STEP 4 / 6','프라이머 뿜칠','**컴프레셔**에 연결한 **페인트 건**으로, **프라이머**를 고르게 뿜어요.'],
+ ['STEP 5 / 6','탄성코트 뿜칠','**탄성코트**도 **뿜칠**로 1차, 충분히 **말리고** 2차까지!'],
+ ['STEP 6 / 6','완성!','**보양**을 걷어내면, **깨끗하고 튼튼한** 벽 완성!'],
  ['공짜','무료 상담','우리 집 벽 상태가 궁금하면, **DM** 주세요.']
 ];
 // ---------- overlay DOM
@@ -64,26 +64,27 @@ const meas=$('meas');const CRP=CRD.map(d=>{const p=document.createElementNS('htt
 const grain=document.createElement('canvas');grain.width=256;grain.height=256;{const g=grain.getContext('2d');const id=g.createImageData(256,256);let s=7;for(let i=0;i<id.data.length;i+=4){s=(s*16807)%2147483647;const v=200+(s%55);id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=26}g.putImageData(id,0,0)}
 const grainPat=ctx.createPattern(grain,'repeat');
 const NC=6;
-// layer helper: column zig-zag; returns reveal state
-function layer(t,t0,span){const c=cl((t-t0)/span);const f=c*NC,i=Math.min(NC-1,Math.floor(f)),u=eio(cl(f-i));const down=i%2===0;return {c,i,u,down,y:down?u*WH:(1-u)*WH,x:i*160+80}}
-function paintLayer(color,t,t0,span){const L=layer(t,t0,span);if(L.c<=0)return L;ctx.fillStyle=color;for(let i=0;i<NC;i++){const e=eio(cl(L.c*NC-i));if(e<=0)continue;if(i%2===0)ctx.fillRect(i*160,0,161,e*WH);else ctx.fillRect(i*160,(1-e)*WH,161,e*WH)}return L}
+// spray layers: horizontal rows, gun sweeps left-right and steps down
+const NR=5,RH=172;
+function rows(t,t0,span){const c=cl((t-t0)/span);const f=c*NR,i=Math.min(NR-1,Math.floor(f)),u=eio(cl(f-i));const right=i%2===0;return {c,i,u,right,x:right?u*WW:(1-u)*WW,y:i*RH+RH/2}}
+function paintRows(color,t,t0,span){const L=rows(t,t0,span);if(L.c<=0)return L;ctx.fillStyle=color;for(let k=0;k<NR;k++){const e=eio(cl(L.c*NR-k));if(e<=0)continue;if(k%2===0)ctx.fillRect(0,k*RH,e*WW,RH+1);else ctx.fillRect((1-e)*WW,k*RH,e*WW+1,RH+1)}return L}
 function drawWall(t){
- const [t1,t2,t3,t4,t5,t6]=ST.slice(1,7);
+ const tS=ST[2],tP=ST[3],tPr=ST[4],tC=ST[5],tD=ST[6];
  ctx.fillStyle='#d8d2c4';ctx.fillRect(0,0,WW,WH);
- const arr=SP.map((_,i)=>t1+0.25+i*(DUR[1]*0.82/SP.length));
+ const arr=SP.map((_,i)=>tS+0.25+i*(DUR[2]*0.82/SP.length));
  SP.forEach(([x,y,s],i)=>{const g=eo((t-0.3-i*0.12)/0.9),rm=eo((t-arr[i])/0.3),a=g*(1-rm);if(a<=0.005)return;const r=s/2*(0.7+0.3*g);const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,`rgba(20,24,16,${.95*a})`);gr.addColorStop(.4,`rgba(30,36,24,${.75*a})`);gr.addColorStop(.7,'rgba(30,36,24,0)');gr.addColorStop(1,'rgba(30,36,24,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill()});
  ctx.lineCap='round';ctx.lineJoin='round';
- CRP.forEach((c,i)=>{const u=eo((t-(t1+DUR[1]*0.55+i*0.25))/0.7);if(u<=0)return;ctx.strokeStyle='#3a3a30';ctx.lineWidth=i===2?8:9;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-u);ctx.stroke(c.path2d)});
- const n=CRP.length,each=(DUR[2]-0.3)/n;const ki=Math.max(0,Math.min(n-1,Math.floor((t-t2-0.1)/each)));const kl=cl((t-t2-0.1-ki*each)/each);
- CRP.forEach((c,i)=>{let uu=0;if(t>=t3)uu=1;else if(t>=t2)uu=i<ki?1:(i===ki?eio(kl):0);if(uu<=0)return;ctx.strokeStyle='#f5f0e4';ctx.lineWidth=i===2?20:22;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-uu);ctx.stroke(c.path2d)});
+ CRP.forEach((c,i)=>{const u=eo((t-(tS+DUR[2]*0.55+i*0.25))/0.7);if(u<=0)return;ctx.strokeStyle='#3a3a30';ctx.lineWidth=i===2?8:9;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-u);ctx.stroke(c.path2d)});
+ const n=CRP.length,each=(DUR[3]-0.3)/n;const ki=Math.max(0,Math.min(n-1,Math.floor((t-tP-0.1)/each)));const kl=cl((t-tP-0.1-ki*each)/each);
+ CRP.forEach((c,i)=>{let uu=0;if(t>=tPr)uu=1;else if(t>=tP)uu=i<ki?1:(i===ki?eio(kl):0);if(uu<=0)return;ctx.strokeStyle='#f5f0e4';ctx.lineWidth=i===2?20:22;ctx.setLineDash([c.L,c.L]);ctx.lineDashOffset=c.L*(1-uu);ctx.stroke(c.path2d)});
  ctx.setLineDash([]);
- const LP=paintLayer('#dfeaf4',t,t3+0.25,DUR[3]-0.7);
- const wet=(t>=t5)?1-eo((t-t5-0.2)/(DUR[5]*0.45)):1;
+ const LP=paintRows('#dfeaf4',t,tPr+1.0,DUR[4]-1.7);
+ const lt5=t-tC;const wet=cl(1-sm(DUR[5]*0.34,DUR[5]*0.6,lt5));
  const cc=`rgb(${Math.round(lerp(236,222,wet))},${Math.round(lerp(230,214,wet))},${Math.round(lerp(216,198,wet))})`;
- const L1=paintLayer(cc,t,t4+0.2,DUR[4]-0.5);
- const st5=t5+DUR[5]*0.5;const L2=paintLayer('#f6f2ea',t,st5,DUR[5]*0.42);
+ const L1=paintRows(cc,t,tC+0.15,DUR[5]*0.3);
+ const t2=tC+DUR[5]*0.62;const L2=paintRows('#f6f2ea',t,t2,DUR[5]*0.32);
  ctx.fillStyle=grainPat;ctx.fillRect(0,0,WW,WH);
- return {arr,ki,kl,LP,L1,L2,st5};
+ return {arr,ki,kl,LP,L1,L2,t2};
 }
 // ---------- Three scene
 const R=new THREE.WebGLRenderer({canvas:$('gl'),antialias:true,preserveDrawingBuffer:true});R.setPixelRatio(1);R.setSize(1080,1920,false);
@@ -113,7 +114,37 @@ const fc=document.createElement('canvas');fc.width=512;fc.height=512;{const g=fc
 const ftex=new THREE.CanvasTexture(fc);ftex.colorSpace=THREE.SRGBColorSpace;ftex.wrapS=ftex.wrapT=THREE.RepeatWrapping;ftex.repeat.set(4,4);
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({map:ftex,roughness:.8}));floor.rotation.x=-Math.PI/2;floor.position.y=F;floor.receiveShadow=true;scene.add(floor);
 // paint bucket prop
-const bucket=ob(new THREE.CylinderGeometry(.55,.48,.8,24),0xdfe3e8,scene);bucket.position.set(2.2,F+.4,-3.6);const bl=ob(new THREE.CylinderGeometry(.56,.56,.35,24),0x2f6fdb,bucket,1.03);bl.position.y=.0;
+
+
+// ---------- veranda entrance sash (masked with plastic) + living room with compressor
+const SZ=-4.3,SASH_X=3.3,SASH_W=5.4,SASH_H=4.9;
+const alu=new THREE.MeshStandardMaterial({color:0xf2f4f7,roughness:.45,metalness:.2});
+function box(w,h,d,x,y,z,m=alu,p=scene){const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);b.castShadow=true;b.receiveShadow=true;p.add(b);return b}
+box(SASH_W+.3,.2,.3,SASH_X,F+.1,SZ);box(SASH_W+.3,.2,.3,SASH_X,F+SASH_H,SZ);box(.2,SASH_H,.3,SASH_X-SASH_W/2,F+SASH_H/2,SZ);box(.2,SASH_H,.3,SASH_X+SASH_W/2,F+SASH_H/2,SZ);box(.14,SASH_H,.26,SASH_X,F+SASH_H/2,SZ);
+const glassM=new THREE.MeshStandardMaterial({color:0xcfe4f5,transparent:true,opacity:.28,roughness:.1});
+const glass=new THREE.Mesh(new THREE.PlaneGeometry(SASH_W,SASH_H),glassM);glass.position.set(SASH_X,F+SASH_H/2,SZ-.02);scene.add(glass);
+// living room behind: back wall, sofa, compressor
+const rw=new THREE.Mesh(new THREE.PlaneGeometry(14,8),new THREE.MeshStandardMaterial({color:0xe8e0d0,roughness:1}));rw.position.set(3.3,F+4,-10);scene.add(rw);
+const sofa=ob(new THREE.BoxGeometry(3.2,1.0,1.2),0x7d8fa8,scene,1.02);sofa.position.set(0.9,F+.5,-9);
+const sofaBack=ob(new THREE.BoxGeometry(3.2,1.1,.35),0x6b7d96,scene,1.02);sofaBack.position.set(0.9,F+1.2,-9.5);
+const comp=new THREE.Group();comp.position.set(3.7,F,-6.9);scene.add(comp);
+const tank=ob(new THREE.CylinderGeometry(.5,.5,1.7,24),0xd9362b,comp);tank.rotation.z=Math.PI/2;tank.position.y=.95;
+const motor=ob(new THREE.BoxGeometry(.8,.7,.9),0x2d3340,comp);motor.position.set(.2,1.75,0);
+const gauge=ob(new THREE.CylinderGeometry(.22,.22,.12,20),0xfafafa,comp);gauge.rotation.x=Math.PI/2;gauge.position.set(-.55,1.7,.5);
+const needle=new THREE.Mesh(new THREE.BoxGeometry(.03,.17,.03),new THREE.MeshBasicMaterial({color:0xd9362b}));needle.position.set(-.55,1.72,.58);comp.add(needle);
+[-.55,.55].forEach(x=>{const w=ob(new THREE.CylinderGeometry(.28,.28,.14,16),0x1b1b1b,comp);w.rotation.x=Math.PI/2;w.position.set(x,.3,.7)});
+const outlet=new V3(3.7-.7,F+1.0,-6.9+.6);
+// masking plastic: sash sheet (pivot at top), floor sheet (pivot at wall), tape
+const plasticM=new THREE.MeshStandardMaterial({color:0xdcecff,transparent:true,opacity:.42,roughness:.15,side:THREE.DoubleSide});
+const sheetGeo=new THREE.PlaneGeometry(SASH_W+.3,SASH_H+.2);sheetGeo.translate(0,-(SASH_H+.2)/2,0);
+const sheet=new THREE.Mesh(sheetGeo,plasticM);sheet.position.set(SASH_X,F+SASH_H+.1,SZ+.22);scene.add(sheet);
+const FLW=7.2,FLL=3.6;const fsGeo=new THREE.PlaneGeometry(FLL,FLW);fsGeo.translate(FLL/2,0,0);
+const fsheet=new THREE.Mesh(fsGeo,plasticM);fsheet.rotation.x=-Math.PI/2;fsheet.rotation.z=0;fsheet.position.set(0.05,F+.03,0);scene.add(fsheet);
+const tapeM=new THREE.MeshBasicMaterial({color:0xffe14d});
+const tapes=[];function tape(w,h,d,x,y,z){const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),tapeM);b.position.set(x,y,z);b.visible=false;scene.add(b);tapes.push(b);return b}
+tape(SASH_W+.4,.1,.04,SASH_X,F+SASH_H+.05,SZ+.24);tape(.1,SASH_H,.04,SASH_X-SASH_W/2-.05,F+SASH_H/2,SZ+.24);tape(.1,SASH_H,.04,SASH_X+SASH_W/2+.05,F+SASH_H/2,SZ+.24);
+tape(.1,.05,FLW,0.07,F+.06,0);
+
 // ---------- the worker (cartoon)
 const root=new THREE.Group();scene.add(root);const upper=new THREE.Group();root.add(upper);
 const SKIN=0xffcf9f,SHIRT=0xffd23d,OVER=0x2f6fdb,BOOT=0x3a2a20,GLOVE=0xff7a2a;
@@ -148,16 +179,32 @@ function ik(a,t,l1,l2,pole){const d=new V3().subVectors(t,a);let D=d.length();co
 const mat=(c,m=0.2,r=.4)=>new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r});
 function mkScraper(){const g=new THREE.Group();const h=ob(new THREE.CylinderGeometry(.12,.14,1.5,16),0x9a6a35,g);h.rotation.z=Math.PI/2;h.position.x=-1.2;const f=ob(new THREE.BoxGeometry(.4,.28,.28),0x555d66,g);f.position.x=-.45;const b=ob(new THREE.BoxGeometry(.95,.8,.05),0xc9cfd6,g,1.04);b.position.x=0;return g}
 function mkKnife(){const g=new THREE.Group();const h=ob(new THREE.CylinderGeometry(.12,.14,1.2,16),0xff8a3d,g);h.rotation.z=Math.PI/2;h.position.x=-1.0;const b=ob(new THREE.BoxGeometry(1.15,.5,.04),0xe3e7ec,g,1.04);b.position.x=0;return g}
-function mkRoller(color){const g=new THREE.Group();const s=ob(new THREE.CylinderGeometry(.3,.3,1.15,28),color,g,1.05);s.rotation.z=Math.PI/2;const cap1=ob(new THREE.CylinderGeometry(.16,.16,1.35,12),0x7b828c,g,1.05);cap1.rotation.z=Math.PI/2;cap1.position.set(0,.0,.0);const pole=ob(new THREE.CylinderGeometry(.07,.07,3.3,10),0x2d3340,g,1.1);pole.position.set(0,1.3,1.3);pole.rotation.x=Math.PI/4.4*-1;pole.rotation.x=-0.7;const gr=ob(new THREE.CylinderGeometry(.11,.11,1.0,12),0xff6a1f,g,1.08);gr.position.set(0,2.15,2.15);gr.rotation.x=-0.7;return g}
-const scraper=mkScraper(),knife=mkKnife(),rollP=mkRoller(0x7fb6f0),rollC1=mkRoller(0xffa56a),rollC2=mkRoller(0xffd2ad);
-[scraper,knife,rollP,rollC1,rollC2].forEach(o=>{o.visible=false;scene.add(o)});
+// spray gun: origin = nozzle tip, nozzle points +x
+function mkGun(){const g=new THREE.Group();
+ const noz=ob(new THREE.CylinderGeometry(.08,.14,.5,16),0xb9bec6,g);noz.rotation.z=-Math.PI/2;noz.position.x=-.25;
+ const body=ob(new THREE.CapsuleGeometry(.24,.9,6,14),0xff7a1f,g);body.rotation.z=Math.PI/2;body.position.x=-.95;
+ const cup=ob(new THREE.CylinderGeometry(.3,.26,.55,18),0xf4f6f8,g);cup.position.set(-.85,.55,0);
+ const lid=ob(new THREE.CylinderGeometry(.32,.32,.08,18),0x2d3340,g);lid.position.set(-.85,.86,0);
+ const hd=ob(new THREE.CapsuleGeometry(.16,.55,4,10),0x2d3340,g);hd.position.set(-1.15,-.55,0);hd.rotation.z=.25;
+ const tr=ob(new THREE.BoxGeometry(.1,.4,.1),0xb9bec6,g,1.05);tr.position.set(-.7,-.38,0);tr.rotation.z=-.4;
+ const con=ob(new THREE.CylinderGeometry(.1,.1,.35,12),0xb9bec6,g);con.rotation.z=Math.PI/2;con.position.set(-1.55,-.35,0);
+ g.userData.conn=new V3(-1.7,-.35,0);return g}
+const scraper=mkScraper(),knife=mkKnife(),gun=mkGun();
+[scraper,knife,gun].forEach(o=>{o.visible=false;scene.add(o)});
 const deb=new THREE.InstancedMesh(new THREE.BoxGeometry(.14,.14,.14),mat(0x7a705f,0,.9),SP.length*8);deb.castShadow=true;scene.add(deb);const dm4=new THREE.Object3D();
+// spray mist
+const NM=60;const mist=new THREE.InstancedMesh(new THREE.SphereGeometry(.09,8,6),new THREE.MeshBasicMaterial({color:0xdfeaf4,transparent:true,opacity:.55}),NM);mist.frustumCulled=false;scene.add(mist);
+// hose
+const hoseM=new THREE.MeshToonMaterial({color:0xff7a1f,gradientMap:grad});let hose=null;
+function drawHose(from){const pts=[from,from.clone().add(new V3(.5,-.9,.2)),new V3(rxLast+.6,F+.07,czLast-1.2),new V3(2.2,F+.07,-2.2),new V3(1.3,F+.07,-3.9),new V3(1.1,F+.07,-5.0),new V3(outlet.x+.3,F+.5,outlet.z+.4),outlet];const cu=new THREE.CatmullRomCurve3(pts);const g=new THREE.TubeGeometry(cu,70,.075,8,false);if(hose){hose.geometry.dispose();hose.geometry=g}else{hose=new THREE.Mesh(g,hoseM);hose.castShadow=true;scene.add(hose)}hose.visible=true}
+let rxLast=2.65,czLast=0.8;
 const sun=new THREE.Mesh(new THREE.SphereGeometry(.6,32,32),new THREE.MeshBasicMaterial({color:0xffd23d}));sun.visible=false;scene.add(sun);
 const rays=new THREE.Group();for(let i=0;i<10;i++){const r=new THREE.Mesh(new THREE.BoxGeometry(.14,.5,.05),new THREE.MeshBasicMaterial({color:0xffd23d}));const a=i/10*Math.PI*2;r.position.set(Math.cos(a)*1.0,Math.sin(a)*1.0,0);r.rotation.z=a-Math.PI/2;rays.add(r)}sun.add(rays);
 const SPK=[];for(let i=0;i<10;i++){const m=new THREE.Mesh(new THREE.OctahedronGeometry(.17),new THREE.MeshBasicMaterial({color:0xffe27a}));m.visible=false;scene.add(m);SPK.push(m)}
 const W=(px,py,z=0)=>wallG.localToWorld(new V3((px-WW/2)/150,(WH/2-py)/150,z));
 // camera keyframes
-const CAMA=[0.75,0.95,0.55,0.95,0.6,0.85,0.7,0.75],CAMD=[19.5,17.2,17.2,17.5,17.0,18.0,18.6,20],CAMH=[1.5,1.3,0.9,0.8,1.6,1.6,1.0,1.0];
+const CAMA=[0.75,0.5,0.55,0.95,0.7,0.7,0.8,0.75],CAMD=[19.5,19,17.2,17.5,18.5,18.5,19,20],CAMH=[1.5,1.6,1.0,0.8,1.5,1.5,1.2,1.0];
+const LK=[[.9,.2,0],[2.4,.3,-2.2],[.9,.2,0],[.9,.2,0],[.9,.2,0],[.9,.2,0],[1.4,.3,-1.0],[.9,.2,0]];
 const lastCz={v:0};
 function render(t){
  let si=0;ST.forEach((s,i)=>{if(t>=s)si=i});const lt=t-ST[si];setTitle(si);
@@ -167,63 +214,87 @@ function render(t){
  [...prog.children].forEach((p,i)=>{p.firstChild.style.width=cl((t-ST[i+1])/DUR[i+1])*100+'%'});
  prog.style.opacity=(si>=1&&si<=6)?1:0;
  const S=drawWall(t);tex.needsUpdate=true;
- const [t1,t2,t3,t4,t5,t6,t7]=ST.slice(1);
- // ---- tools & targets
- let toolTip=null,grips=null,active=null;
- const tilt=(o,x,y,z)=>{o.rotation.set(x,y,z)};
- [scraper,knife,rollP,rollC1,rollC2].forEach(o=>o.visible=false);
- if(t>=t1-0.1&&t<t2){const wp=[[-80,40]].concat(SP.map(([x,y])=>[x-90,y-40]));const ts=[t1-0.1].concat(S.arr);let q=0;for(let i=0;i<ts.length-1;i++)if(t>=ts[i])q=i;const a=wp[q],b=wp[Math.min(q+1,wp.length-1)];const u=eio((t-ts[q])/((ts[Math.min(q+1,ts.length-1)]-ts[q])||1));const scrub=(t>ts[1])?Math.sin(t*26)*16:0;
-  scraper.position.copy(W(lerp(a[0],b[0],u)+250+scrub,lerp(a[1],b[1],u)+60,.4));tilt(scraper,0,Math.PI,0.35+Math.sin(t*26)*0.05);scraper.visible=true;active=scraper;grips=[new V3(-1.2,0,0),new V3(-.55,.0,0)];}
- else if(t>=t2&&t<t3){const c=CRP[S.ki];const pos=c.p.getPointAtLength(c.L*eio(S.kl));knife.position.copy(W(pos.x+70,pos.y+15,.4));tilt(knife,0,Math.PI,0.3);knife.visible=true;active=knife;grips=[new V3(-1.0,0,0),new V3(-.4,0,0)]}
- else{const Ls=[[t3+0.25,DUR[3]-0.7,S.LP,rollP,t4],[t4+0.2,DUR[4]-0.5,S.L1,rollC1,S.st5-0.0001+ (t5-S.st5)],[S.st5,DUR[5]*0.42,S.L2,rollC2,t6]];
-  const wins=[[t3,t4,S.LP,rollP],[t4,t5,S.L1,rollC1],[S.st5,t6,S.L2,rollC2]];for(const [a,b,L,r] of wins){if(t>=a&&t<b){r.position.copy(W(L.x,L.y,.45));r.rotation.set(0,Math.PI/2,0);r.visible=true;active=r;grips=[new V3(0,2.4,2.4),new V3(0,1.35,1.35)]}}}
+ const [tM,tS,tP,tPr,tC,tD,tO]=ST.slice(1);
+ // ---- masking plastic (scene 1), removed in scene 6
+ const sheetIn=eio((t-tM-0.3)/1.5),floorIn=eio((t-tM-1.9)/1.7);const rm=eio((t-tD-0.2)/1.1);
+ const shU=sheetIn*(1-rm);sheet.scale.y=Math.max(0.0001,shU);sheet.visible=shU>0.001;
+ const flU=floorIn*(1-eio((t-tD-0.6)/1.1));fsheet.scale.x=Math.max(0.0001,flU);fsheet.visible=flU>0.001;
+ tapes.forEach((b,i)=>{b.visible=(i<3?t>tM+(2.6+i*0.25)&&t<tD+0.4:t>tM+3.7&&t<tD+0.8)});
+ // ---- tools
+ [scraper,knife,gun].forEach(o=>o.visible=false);
+ let active=null,grips=null,mistTgt=null,mistCol=0xdfeaf4;
+ if(t>=tS-0.1&&t<tP){const wp=[[-80,40]].concat(SP.map(([x,y])=>[x-90,y-40]));const ts=[tS-0.1].concat(S.arr);let q=0;for(let i=0;i<ts.length-1;i++)if(t>=ts[i])q=i;const a=wp[q],b=wp[Math.min(q+1,wp.length-1)];const u=eio((t-ts[q])/((ts[Math.min(q+1,ts.length-1)]-ts[q])||1));const scrub=(t>ts[1])?Math.sin(t*26)*16:0;
+  scraper.position.copy(W(lerp(a[0],b[0],u)+250+scrub,lerp(a[1],b[1],u)+60,.4));scraper.rotation.set(0,Math.PI,0.35+Math.sin(t*26)*0.05);scraper.visible=true;active=scraper;grips=[new V3(-1.2,0,0),new V3(-.55,.0,0)];}
+ else if(t>=tP&&t<tPr){const c=CRP[S.ki];const pos=c.p.getPointAtLength(c.L*eio(S.kl));knife.position.copy(W(pos.x+70,pos.y+15,.4));knife.rotation.set(0,Math.PI,0.3);knife.visible=true;active=knife;grips=[new V3(-1.0,0,0),new V3(-.4,0,0)]}
+ else{const wins=[[tPr+0.8,tC,S.LP,0xdfeaf4,tPr+1.0,DUR[4]-1.7],[tC,tD,null,0xece6d8,0,0]];
+  let L=null,col=0xdfeaf4;
+  if(t>=tPr+0.8&&t<tC){L=S.LP;col=0xdfeaf4}
+  else if(t>=tC&&t<tD){const lt5=t-tC;if(lt5<DUR[5]*0.34){L=S.L1;col=0xece6d8}else if(lt5>=DUR[5]*0.6){L=S.L2;col=0xf6f2ea}}
+  if(L){const live=(t>=tPr+1.0)&&(t<tC-0.6||t>=tC);gun.position.copy(W(L.x,L.y,1.35));gun.rotation.set(0,Math.PI,0.0);gun.visible=true;active=gun;grips=[new V3(-1.15,-.55,0),new V3(-1.75,-.35,.1)];if(live&&L.c>0&&L.c<1){mistTgt=W(L.x,L.y,0.02);mistCol=col}}
+ }
  // debris
  for(let i=0;i<SP.length;i++)for(let j=0;j<8;j++){const u=(t-S.arr[i])/0.9,idx=i*8+j;if(u>0&&u<1){const ang=j/8*Math.PI*2+i,sp=1.3+j*.18;const v=W(SP[i][0]+Math.cos(ang)*sp*90*u,SP[i][1]+Math.sin(ang)*sp*70*u,.25+Math.sin(u*3)*.6);v.y-=u*u*1.6;dm4.position.copy(v);dm4.rotation.set(u*9+j,u*7,0);dm4.scale.setScalar(1-u)}else{dm4.position.set(0,-50,0);dm4.scale.setScalar(0.0001)}dm4.updateMatrix();deb.setMatrixAt(idx,dm4.matrix)}deb.instanceMatrix.needsUpdate=true;
- // ---- worker pose
- let gR=null,gL=null,cz=0.8,crouch=0,lean=0.08,jump=0;
- if(active){active.updateMatrixWorld(true);gR=active.localToWorld(grips[0].clone());gL=active.localToWorld(grips[1].clone());cz=gR.z-1.1;const hy=gR.y;crouch=cl((0.1-(hy-1.6))/3.4,0,1)*1.15*CS;lean=0.12+0.2*cl(crouch/1.2);if(active===scraper||active===knife){cz=gR.z-1.1;}}
- else{const idle=si===0?1:0;cz=lerp(0.8,0.4,0)+Math.sin(t*1.4)*0.05;}
- // smooth cz between targets using last value (deterministic: ease from scene start)
- const hipY=1.75*CS-crouch;
- const rx=2.65;
- // walking feet
+ // ---- worker targets
+ let gR=null,gL=null,cz=0.8,crouch=0,lean=0.08;
+ const wave=(si===0||si===7),cheer=(si===6&&t>tD+1.6);
+ let handsOverride=null;
+ if(active){active.updateMatrixWorld(true);gR=active.localToWorld(grips[0].clone());gL=active.localToWorld(grips[1].clone());cz=gR.z-1.1;crouch=cl((0.1-(gR.y-1.6))/3.4,0,1)*1.15*CS;lean=0.12+0.2*cl(crouch/1.2)}
+ else if(si===1){ // masking: pull the sheet down, roll out the floor sheet
+  const phA=sheetIn<1&&t<tM+1.9,phB=!phA&&t<tM+3.6;
+  const edgeY=F+SASH_H+.1-sheetIn*(SASH_H+.2)+0.3;
+  if(phA){cz=-3.3;crouch=cl((-edgeY+ -0.5)/3.4,0,1)*0.9*CS;handsOverride=[new V3(SASH_X+.8,edgeY,SZ+.4),new V3(SASH_X-.8,edgeY,SZ+.4)]}
+  else if(phB){const ex=0.05+floorIn*FLL;cz=-1.6+floorIn*0.3;crouch=0.9*CS;handsOverride=[new V3(ex,F+.15,cz+.9),new V3(ex,F+.15,cz-.9)]}
+  else{cz=-3.2;crouch=0.2;handsOverride=[new V3(SASH_X+1.8,F+SASH_H-.2,SZ+.5),new V3(2.65,F+1.6,-3.2)]}
+  lean=0.2+0.2*cl(crouch/1.2)}
+ else if(si===6&&!cheer){cz=-2.8;crouch=0.5*CS;lean=0.25;const pu=eio((t-tD-0.2)/1.1);handsOverride=[new V3(SASH_X+1.5,F+SASH_H-pu*3.5,SZ+.5),new V3(2.65,F+1.3,-3.0)]}
+ else{cz=(cheer?0.2:0.8)+Math.sin(t*1.4)*0.05}
+ cz=cl(cz,-3.6,3.4);
+ const hipY=1.75*CS-crouch,rx=2.65;rxLast=rx;czLast=cz;
  const moving=Math.min(1,Math.abs(cz-lastCz.v)*40);lastCz.v=cz;
- root.position.set(rx,F,cz);root.rotation.y=-Math.PI/2+ (si===0||si===7?0.35:0);
+ root.position.set(rx,F,cz);root.rotation.y=-Math.PI/2+(wave?0.35:0);
  upper.position.y=hipY;upper.rotation.x=lean;
- // celebrate / wave states
- const wave=(si===0||si===7);const cheer=(si===6);
- let jy=0;if(cheer){jy=Math.abs(Math.sin((t-t6)*5))*0.5;}
- root.position.y=F+jy;
- root.updateMatrixWorld(true);
+ let jy=0;if(cheer)jy=Math.abs(Math.sin((t-tD-1.6)*5))*0.5;root.position.y=F+jy;root.updateMatrixWorld(true);
  const hipL=root.localToWorld(new V3(-.3*CS,hipY,0)),hipR=root.localToWorld(new V3(.3*CS,hipY,0));
- const footBase=[new V3(rx-0.1,F+.28*CS,cz-.45),new V3(rx+0.1,F+.28*CS,cz+.45)];
- const ph=cz*2.4;
+ const footBase=[new V3(rx-0.1,F+.28*CS,cz-.45),new V3(rx+0.1,F+.28*CS,cz+.45)];const ph=cz*2.4;
  [0,1].forEach(k=>{const f=footBase[k].clone();if(!cheer){f.z+=Math.sin(ph+k*Math.PI)*0.2*moving;f.y+=Math.max(0,Math.cos(ph+k*Math.PI))*0.22*moving}else f.y+=jy*0.9;
-  const hp=k===0?hipL:hipR;const [kn,an]=ik(hp,f,1.05*CS,1.05*CS,new V3(-1,0.1,0));place(legSeg[k][0],hp,kn);place(legSeg[k][1],kn,an);knees[k].position.copy(kn);boots[k].position.copy(an).add(new V3(-.22*CS,-.1*CS,0));boots[k].rotation.set(0,0,Math.PI/2);boots[k].rotation.order='YXZ';boots[k].rotation.set(Math.PI/2,0,Math.PI/2)});
- // arms
+  const hp=k===0?hipL:hipR;const [kn,an]=ik(hp,f,1.05*CS,1.05*CS,new V3(-1,0.1,0));place(legSeg[k][0],hp,kn);place(legSeg[k][1],kn,an);knees[k].position.copy(kn);boots[k].position.copy(an).add(new V3(-.22*CS,-.1*CS,0));boots[k].rotation.order='YXZ';boots[k].rotation.set(Math.PI/2,0,Math.PI/2)});
  const shR=upper.localToWorld(new V3(.64*CS,1.55*CS,0)),shL=upper.localToWorld(new V3(-.64*CS,1.55*CS,0));
  let tR,tL;
  if(gR){tR=gR;tL=gL}
+ else if(handsOverride){tR=handsOverride[0];tL=handsOverride[1]}
  else if(wave){const w=Math.sin(t*9)*0.35;tR=upper.localToWorld(new V3(.9*CS,3.1*CS,.2*CS+w*CS));tL=upper.localToWorld(new V3(-.75*CS,.35*CS,.3*CS))}
  else if(cheer){const w=Math.sin(t*10)*0.25;tR=upper.localToWorld(new V3(.8*CS,3.5*CS,.1*CS));tL=upper.localToWorld(new V3(-.8*CS,3.5*CS+w,.1*CS))}
  else{tR=upper.localToWorld(new V3(.75*CS,.4*CS,.3*CS));tL=upper.localToWorld(new V3(-.75*CS,.4*CS,.3*CS))}
  const aL=1.05*CS;
  [[shR,tR,'R',new V3(0.2,-1,0.6)],[shL,tL,'L',new V3(0.2,-1,-0.6)]].forEach(([sh,tg,k,pole])=>{const [el,en]=ik(sh,tg,aL,aL,pole);place(armSeg[k][0],sh,el);place(armSeg[k][1],el,en);hands[k].position.copy(en);shoul[k].position.copy(sh)});
- // head look: toward the work / camera
  headG.rotation.y=wave||cheer?0.9:0.95;headG.rotation.x=active?0.12:0;
  const talk=Math.abs(Math.sin(t*10));smile.scale.y=(si===7||si===0)?0.8+0.5*talk:1;
- // tool actually in hand: pull the tool onto the gripped hand (keeps both consistent)
+ // ---- hose + compressor (only when the gun exists in the scene: from scene 4 on until done)
+ const gunPhase=(t>=tPr-0.2&&t<tD);
+ if(gunPhase){const from=gun.visible?gun.localToWorld(gun.userData.conn.clone()):hands.R.position.clone().add(new V3(.2,-.4,0));drawHose(from)}else if(hose)hose.visible=false;
+ const spraying=!!mistTgt;comp.position.y=F+(spraying?Math.sin(t*55)*0.012:0);needle.rotation.z=spraying?Math.sin(t*3)*.6:0.9;
+ // ---- mist particles
+ for(let j=0;j<NM;j++){if(mistTgt&&gun.visible){const from=gun.localToWorld(new V3(.1,0,0));const s=((t*2.6+j/NM)%1);const sp=0.55*s;const ph=j*2.399;const p=from.clone().lerp(mistTgt,s);p.y+=Math.sin(ph)*sp;p.z+=Math.cos(ph)*sp;dm4.position.copy(p);dm4.scale.setScalar(.5+s*1.2);}else{dm4.position.set(0,-60,0);dm4.scale.setScalar(.0001)}dm4.rotation.set(0,0,0);dm4.updateMatrix();mist.setMatrixAt(j,dm4.matrix)}
+ mist.instanceMatrix.needsUpdate=true;mist.material.color.setHex(mistCol);
  // ---- sun & sparkles
- const sOn=(si===5&&lt<DUR[5]*0.55);sun.visible=sOn;sunLight.intensity=sOn?70*cl(lt/0.25):0;if(sOn){sun.position.copy(W(790,110,1.6));sun.scale.setScalar(cl(lt/0.25));rays.rotation.z=t*1.2;sunLight.position.copy(sun.position)}
- SPK.forEach((m,j)=>{const u=si===6?cl((t-t6-0.3-j*0.1)/0.3):0;const pulse=.5+.5*Math.sin(t*6+j*1.7);m.visible=u>0;if(u>0){const a=j/10*Math.PI*2;m.position.copy(W(480+Math.cos(a)*400,430+Math.sin(a*1.7)*330,.5+Math.sin(j)*.3));m.scale.setScalar((.6+1.1*pulse)*u);m.rotation.set(t*2+j,t*3,0)}});
- // chip + dm
- let chipText='',cu=0;if(si===1){chipText='스크래퍼로 긁기';cu=cl(lt/0.2)}if(si===2){chipText='퍼티 칼로 메우기';cu=cl(lt/0.2)}if(si===3){chipText='프라이머 (바탕 잡기)';cu=cl(lt/0.2)}if(si===4){chipText='탄성코트 1차';cu=cl(lt/0.2)}if(si===5){const mid=DUR[5]*0.5;chipText=lt>mid?'탄성코트 2차':'충분히 건조';cu=cl((lt>mid?lt-mid:lt)/0.2)}
- $('chip').textContent=chipText;$('chip').style.opacity=(si>=1&&si<=5)?cu:0;
- const du=back((t-t7-0.25)/0.5);$('dm').style.opacity=t>t7+0.1?cl((t-t7-0.1)/0.15):0;$('dm').style.transform=`scale(${.5+.5*du+0.03*Math.sin(t*7)})`;
- // camera
+ const lt5=t-tC;const sOn=(si===5&&lt5>DUR[5]*0.34&&lt5<DUR[5]*0.62);sun.visible=sOn;sunLight.intensity=sOn?70*cl(Math.min((lt5-DUR[5]*0.34)/0.25,(DUR[5]*0.62-lt5)/0.25)):0;if(sOn){sun.position.copy(W(790,110,1.6));sun.scale.setScalar(cl(Math.min((lt5-DUR[5]*0.34)/0.25,(DUR[5]*0.62-lt5)/0.25)));rays.rotation.z=t*1.2;sunLight.position.copy(sun.position)}
+ SPK.forEach((m,j)=>{const u=(si===6&&t>tD+1.3)?cl((t-tD-1.3-j*0.1)/0.3):0;const pulse=.5+.5*Math.sin(t*6+j*1.7);m.visible=u>0;if(u>0){const a=j/10*Math.PI*2;m.position.copy(W(480+Math.cos(a)*400,430+Math.sin(a*1.7)*330,.5+Math.sin(j)*.3));m.scale.setScalar((.6+1.1*pulse)*u);m.rotation.set(t*2+j,t*3,0)}});
+ // ---- chip + dm
+ let chipText='',cu=0;
+ if(si===1){chipText='비닐 보양';cu=cl(lt/0.2)}
+ if(si===2){chipText='스크래퍼로 긁기';cu=cl(lt/0.2)}
+ if(si===3){chipText='퍼티 칼로 메우기';cu=cl(lt/0.2)}
+ if(si===4){chipText='프라이머 뿜칠';cu=cl((lt-0.8)/0.2)}
+ if(si===5){const a=DUR[5]*0.34,b=DUR[5]*0.6;chipText=lt<a?'탄성코트 1차 뿜칠':(lt<b?'충분히 건조':'탄성코트 2차 뿜칠');cu=1}
+ if(si===6){chipText='보양 제거';cu=cl(lt/0.2)*(1-cl((lt-2)/0.3))}
+ $('chip').textContent=chipText;$('chip').style.opacity=(si>=1&&si<=6)?cu:0;
+ const du=back((t-tO-0.25)/0.5);$('dm').style.opacity=t>tO+0.1?cl((t-tO-0.1)/0.15):0;$('dm').style.transform=`scale(${.5+.5*du+0.03*Math.sin(t*7)})`;
+ // ---- camera
  const k=Math.min(si,7),k0=Math.max(0,k-1),w=eio(lt/1.0);
  const ang=lerp(CAMA[k0],CAMA[k],w)+Math.sin(t*0.7)*0.04,dist=lerp(CAMD[k0],CAMD[k],w)-lt*0.1,hh=lerp(CAMH[k0],CAMH[k],w);
- cam.position.set(Math.sin(ang)*dist,hh+1.0,Math.cos(ang)*dist);cam.lookAt(0.9,0.2,0);
+ cam.position.set(Math.sin(ang)*dist,hh+1.0,Math.cos(ang)*dist);
+ let lk=LK[k].slice();if(si===4){const a=[3.2,0.6,-5.4],b=LK[4];const m=sm(0.5,2.0,lt);lk=[lerp(a[0],b[0],m),lerp(a[1],b[1],m),lerp(a[2],b[2],m)]}else{const p=LK[k0],m=eio(lt/1.0);lk=[lerp(p[0],LK[k][0],m),lerp(p[1],LK[k][1],m),lerp(p[2],LK[k][2],m)]}
+ cam.lookAt(lk[0],lk[1],lk[2]);
  R.render(scene,cam);
 }
 let T=0;window.__step=(s=1/30)=>{T+=s;render(T);return T};window.__render=render;
