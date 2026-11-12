@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>탄성코트 릴스 (글자만)</title>
+<style>
+@font-face{font-family:P;src:url(Pretendard-Black.otf);font-weight:900}
+html,body{margin:0;background:#111}
+#c{position:relative;width:1080px;height:1920px;overflow:hidden;background:#111;font-family:P,sans-serif;font-weight:900;color:#fff}
+.t{position:absolute;left:0;width:1080px;text-align:center;font-size:104px;line-height:1.2;letter-spacing:-2px;text-shadow:0 6px 0 rgba(0,0,0,.35);opacity:0;white-space:nowrap}
+.g{color:#C8FF2E}.s{font-size:58px;letter-spacing:0}
+#wall{position:absolute;left:60px;top:780px;width:960px;height:780px;border-radius:36px;overflow:hidden;background:#d8d2c4;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#wall>*{position:absolute}
+.stain{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(20,24,16,.95) 0%,rgba(30,36,24,.75) 40%,rgba(30,36,24,0) 70%);filter:blur(6px)}
+#stains,#drops{inset:0}
+#clean{inset:0;background:#f2eee6;clip-path:inset(0 0 100% 0)}
+#roller{left:-20px;width:1000px;height:96px;top:-96px}
+#roller i{position:absolute;left:0;top:0;width:1000px;height:80px;border-radius:40px;background:#e8e4da;box-shadow:0 8px 0 #b9b3a4}
+#sponge{width:200px;height:130px;border-radius:30px;background:#f5d84a;box-shadow:0 8px 0 #c9a920;opacity:0;left:0;top:0}
+#badge{left:50%;top:40px;transform:translateX(-50%);font-size:64px;background:#C8FF2E;color:#111;border-radius:60px;padding:14px 44px;opacity:0}
+.chk{left:0;width:960px;text-align:center;font-size:72px;color:#111;opacity:0;white-space:nowrap;text-shadow:none}
+svg{left:0;top:0}
+#foot{position:absolute;left:0;width:1080px;top:1610px;text-align:center;font-size:36px;color:#aaa;opacity:0}
+</style></head><body>
+<div id="c">
+ <div class="t" id="a1" style="top:200px">베란다 벽 보고</div>
+ <div class="t g" id="a2" style="top:330px">한숨 쉰 적 있지?</div>
+ <div class="t" id="b1" style="top:200px">락스로 닦았는데</div>
+ <div class="t g" id="b2" style="top:330px">2주 뒤에 또 옴ㅋㅋ</div>
+ <div class="t" id="c1" style="top:200px">범인은 벽 속 <span class="g">습기</span></div>
+ <div class="t s" id="c2" style="top:350px;color:#ccc">겉만 닦으면 소용없음</div>
+ <div class="t" id="d1" style="top:200px">그래서 <span class="g">탄성코트</span></div>
+ <div class="t s" id="d2" style="top:350px;color:#ccc">벽 자체를 새로 입히는 거임</div>
+ <div class="t" id="e1" style="top:200px">칠하고 나면</div>
+ <div class="t g" id="e2" style="top:330px">이렇게 됨</div>
+ <div class="t" id="f1" style="top:190px">우리 집 벽 궁금해?</div>
+ <div class="t g" id="f2" style="top:320px">사진 DM으로 보내봐</div>
+ <div class="t s" id="f3" style="top:1620px;color:#fff">곰팡이 심사위원이 <span class="g">무료</span>로 판정해줌</div>
+ <div class="t s" id="f4" style="top:1710px;color:#aaa;font-size:44px">시공 안 맡겨도 돼</div>
+ <div id="wall">
+   <div id="stains"></div>
+   <svg id="cracks" width="960" height="780" viewBox="0 0 960 780">
+     <path class="cr" d="M120 0 L150 120 L110 230 L170 360 L140 470" stroke="#3a3a30" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+     <path class="cr" d="M700 80 L660 200 L720 300 L690 430 L750 560" stroke="#3a3a30" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+     <path class="cr" d="M420 420 L470 500 L440 600 L500 700" stroke="#3a3a30" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   </svg>
+   <div id="drops"></div>
+   <div id="clean"></div>
+   <div id="roller"><i></i></div>
+   <div id="sponge"></div>
+   <div id="badge" style="position:absolute">탄성코트</div>
+   <div class="chk" id="k1" style="top:140px">✔ 갈라진 틈 메우고</div>
+   <div class="chk" id="k2" style="top:300px">✔ 물 스며드는 거 막고</div>
+   <div class="chk" id="k3" style="top:460px">✔ 곰팡이 덜 생기게</div>
+ </div>
+ <div id="dm" style="position:absolute;left:290px;top:820px;width:500px;height:500px;border-radius:50%;background:#C8FF2E;color:#111;font-size:210px;line-height:500px;text-align:center;opacity:0">DM</div>
+ <div id="foot">※ 벽 상태에 따라 결과는 달라요</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eo=x=>1-Math.pow(1-cl(x),3);
+const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+// text with in/out window
+function txt(id,t0,t1,delay=0){const e=$(id);const u=(T)=>T;return {e,t0:t0+delay,t1}}
+const T=[['a1',0.1,2.7],['a2',0.5,2.7],['b1',2.8,5.5],['b2',3.2,5.5],['c1',5.6,8.1],['c2',6.1,8.1],['d1',8.2,10.9],['d2',8.7,10.9],['e1',11.0,13.5],['e2',11.3,13.5],['f1',13.8,17],['f2',14.2,17],['f3',14.8,17],['f4',15.3,17]];
+// stains
+const SP=[[90,120,260],[640,60,300],[300,330,320],[760,420,260],[120,560,300],[520,600,280],[860,180,220]];
+const st=$('stains');SP.forEach(([x,y,s])=>{const d=document.createElement('div');d.className='stain';d.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px;opacity:0`;st.appendChild(d)});
+const dr=$('drops');for(let i=0;i<7;i++){const d=document.createElement('div');d.style.cssText=`position:absolute;left:${80+i*125}px;top:0;width:18px;height:28px;border-radius:50% 50% 50% 50%/65% 65% 35% 35%;background:#6fb6e8;opacity:0`;dr.appendChild(d)}
+const cr=[...document.querySelectorAll('.cr')];cr.forEach(p=>{const L=p.getTotalLength();p.style.strokeDasharray=L;p.dataset.L=L;p.style.strokeDashoffset=L});
+let t=0;
+function render(t){
+ // texts
+ T.forEach(([id,a,b])=>{const e=$(id);let o=0,y=0,s=1;
+  if(t>=a&&t<=b){const u=back((t-a)/0.35);o=cl((t-a)/0.15);s=0.6+0.4*u;y=(1-u)*60;const out=cl((t-(b-0.2))/0.2);o*= (1-out);}
+  e.style.opacity=o;e.style.transform=`translateY(${y}px) scale(${s})`;});
+ // wall visibility/entrance
+ const wu=back((t-0.0)/0.5);$('wall').style.transform=`scale(${0.85+0.15*wu})`;
+ $('wall').style.opacity=cl(t/0.25);
+ // stains: grow in 0.3-1.5 ; scrub 3.0-4.4 fade; regrow 4.4-5.4 ; persist to 8.3 ; then removed by roller
+ const S=[...st.children];
+ S.forEach((d,i)=>{let g=eo((t-0.2-i*0.1)/0.9);let o=g;
+  if(t>3.0){const f=cl((t-3.0-i*0.05)/1.2);o=g*(1-f)}
+  if(t>4.4){o=Math.max(o,g*eo((t-4.4-i*0.08)/1.0)*0.9)}
+  d.style.opacity=o;d.style.transform=`scale(${0.7+0.3*g+(t>6&&t<8.3?0.05*Math.sin(t*6+i):0)})`});
+ // sponge
+ const sp=$('sponge');const su=cl((t-2.9)/1.5);
+ sp.style.opacity=(t>2.9&&t<4.5)?1:0;
+ sp.style.left=(60+ (su*0.5>0? 0:0) + 380+Math.sin(su*Math.PI*6)*300)+'px';sp.style.top=(120+su*520)+'px';
+ // cracks 5.7-7.2
+ cr.forEach((p,i)=>{const u=eo((t-5.8-i*0.35)/0.9);p.style.strokeDashoffset=p.dataset.L*(1-u);p.style.opacity=(t<8.3+i*0.2)?1:0});
+ // drops 6.6-8.2
+ [...dr.children].forEach((d,i)=>{const u=cl((t-6.6-i*0.12)/1.2);d.style.opacity=(u>0&&u<1)?0.9:0;d.style.top=(100+u*600)+'px'});
+ // roller 8.3-10.4 sweeps top->bottom
+ const ru=cl((t-8.3)/2.1),re=eo(ru);
+ $('roller').style.top=(-96+re*(780+96))+'px';$('roller').style.opacity=(t>8.3&&ru<1)?1:0;
+ $('clean').style.clipPath=`inset(0 0 ${100-re*100}% 0)`;
+ // badge
+ const bu=back((t-8.4)/0.4);$('badge').style.opacity=(t>8.4&&t<10.9)?cl((t-8.4)/0.15):0;$('badge').style.transform=`translateX(-50%) scale(${0.6+0.4*bu})`;
+ // checks
+ [['k1',11.6],['k2',12.2],['k3',12.8]].forEach(([id,a])=>{const e=$(id);const u=back((t-a)/0.35);e.style.opacity=t>a?cl((t-a)/0.12)*(t<13.7?1:cl(1-(t-13.7)/0.2)):0;e.style.transform=`translateY(${(1-u)*40}px) scale(${0.7+0.3*u})`});
+ $('foot').style.opacity=(t>12.8&&t<13.8)?0.9:0;
+ // wall fades at CTA, shrinks
+ if(t>13.7){const o=1-cl((t-13.7)/0.3);$('wall').style.opacity=o}
+ const du=back((t-14.0)/0.5);$('dm').style.opacity=t>14.0?cl((t-14.0)/0.15):0;$('dm').style.transform=`scale(${0.5+0.5*du+0.03*Math.sin(t*7)})`;
+ // bg flash
+ $('c').style.background= (t>13.8)?'#161d0c':'#111';
+}
+window.__step=(s=1/30)=>{t+=s;render(t);return t};
+render(0);
+</script></body></html>
