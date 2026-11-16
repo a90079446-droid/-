@@ -163,7 +163,9 @@ def structure(path: str, n_hint: int | None = None) -> list[dict]:
         import librosa
     except ImportError:
         return []
-    y, sr = librosa.load(path, sr=22050, mono=True)
+    # librosa 는 m4a 등을 못 읽는 경우가 있어 Essentia(ffmpeg 기반)로 불러온다.
+    sr = 22050
+    y = es.MonoLoader(filename=path, sampleRate=sr)().astype(np.float32)
     dur = len(y) / sr
     hop = 512
     tempo, beats = librosa.beat.beat_track(y=y, sr=sr, hop_length=hop)
