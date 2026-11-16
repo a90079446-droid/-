@@ -1,3 +1,4 @@
 models/
 *_analysis.json
 *_analysis.md
+__pycache__/
