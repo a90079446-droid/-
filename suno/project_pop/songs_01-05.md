@@ -36,10 +36,10 @@ Through the concrete, through the concrete, I ain't done
 They poured the city on me, but I still found the sun
 
 [Verse 2: Band pulls back, no sub bass, sparse drums, gritty clipped delivery]
-Ten years later there's a crew with a can of tar
+Ten years later comes a crew with cans of tar
 Foreman kneels to seal me, sees how tall we are
 Little girl beside him holdin' tight to her mother's hand
-Says a tree is growin' where the cars used to stand
+Says a tree is growin' where the cars would stand
 He puts the bucket down and lets the shovel drop
 Now my roots run under every corner of the lot
 Lifted up the yellow lines, they buckle when I breathe
@@ -207,9 +207,9 @@ female vocals, falsetto, metal, screaming, EDM drop, country, autotune, muffled 
 [Verse 1: Tight live drums, stomping floor toms, no sub bass, breathless staccato vocal]
 Chalk on my palms and the stadium holdin' still
 Third leg comin' 'round the curve, runnin' on his will
-We were dead last at the gun, they all saw the score
+Dead last at the gun, and they all saw the score
 Clipboards in the bleachers didn't watch us anymore
-But I been countin' steps since I was nine years old
+I been countin' steps since I was nine years old
 Every lap alone at dawn, every mornin' in the cold
 Hand goes back, eyes front, I don't look behind
 Trust is somethin' felt, it ain't somethin' you find
@@ -233,12 +233,12 @@ Put it in my hand, I'm bringin' all of us home
 [Verse 2: Band pulls back, no sub bass, sparse drums, gritty clipped delivery]
 Hundred meters left and I'm passin' lane by lane
 Lungs are full of thunder, legs are full of rain
-Caught the kid in red with my shoulder at his ear
+Caught the kid in red, my shoulder at his ear
 Heard my mama screamin' from the railing, loud and clear
 Threw my chest across the tape with nothin' left
 Turned and saw my brothers, hands up on their heads
 Medal round their necks first, I just hold the stick
-Carved our names along it, pass it to the next kid quick
+Carve our names and pass it to the next kid quick
 
 [Chorus: Full band explodes, heavy sub bass and big drums hit together, chiming guitars, belted doubled vocals]
 Put it in my hand, I'm bringin' all of us home
@@ -319,12 +319,12 @@ Stay lit, stay lit, through the hours of the storm
 I'm the one white promise keepin' every sailor warm
 
 [Verse 2: Band pulls back, no sub bass, sparse drums, gritty clipped delivery]
-Dawn comes up like silver on a sea that's lyin' still
+Dawn comes silver on a sea that's lyin' still
 One small trawler limpin' in past the harbor hill
 Captain climbs my stairs with his cap against his chest
-Shore was gone, I steered by you and did the rest
-Little daughter on the dock draws a tower by the sea
-Gives it to the keeper, tapes it right inside of me
+Shore was gone, I steered by you, did the rest
+Daughter on the dock draws a tower by the sea
+Hands it to the keeper, tapes it up inside me
 Storm'll come again, I hear it hummin' in the stone
 Light that saved a crew don't ever stand alone
 
@@ -391,7 +391,7 @@ Cable gets tighter, my shoulders creak against the sky
 Operator whispers easy, sends the heavy load up high
 People on the sidewalk never look up from their phones
 Never see the weight I carry over all their homes
-I was built to bear it, built to swing it into place
+Built to bear it, built to swing it into place
 Every beam I set becomes somebody's livin' space
 
 [Pre-Chorus: Mids swell, tension builds, sub bass held back]
