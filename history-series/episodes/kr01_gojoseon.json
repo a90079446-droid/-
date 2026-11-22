@@ -1,0 +1,207 @@
+{
+ "id": "kr01",
+ "series": "수묵으로 보는 한국사",
+ "title": "고조선",
+ "subtitle": "첫 번째 나라 · 기원전 2333 – 기원전 108",
+ "seal": "朝",
+ "style": "Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+ "era_costume": "Ancient Korean Bronze Age people of Gojoseon: hair tied in a simple topknot or worn long, plain undyed hemp tunics and wide trousers, fur and leather cloaks, bronze mirrors and bells, bronze daggers. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing, or Chinese imperial robes.",
+ "scenes": [
+  {
+   "prompt": "A fortified earthen-walled capital city at night engulfed in flames, smoke rising into a dark sky, silhouettes of defenders on the wall, vermilion fire glow, epic wide shot",
+   "sub": "기원전 108년\n왕검성이 불타고 있었다",
+   "narr": "기원전 백팔 년. 왕검성이 불타고 있었다.",
+   "costume": true
+  },
+  {
+   "prompt": "A lone ancient Korean warrior standing on a burnt city wall at dawn, looking over smoke and ruins, seen from behind, melancholic",
+   "sub": "이천 년을 이어 온 나라는\n어떻게 시작되었을까",
+   "narr": "이천 년을 이어 온 나라는 어떻게 시작되었고, 어떻게 무너졌을까.",
+   "costume": true
+  },
+  {
+   "prompt": "Majestic misty mountain ranges of the Korean peninsula at sunrise, vast empty sky, a single vermilion sun, sweeping landscape",
+   "title_card": true,
+   "sub": "",
+   "narr": "",
+   "hold": 4.0
+  },
+  {
+   "prompt": "A heavenly prince descending from swirling clouds onto a sacred mountain peak, accompanied by three robed spirits of wind, rain and clouds, mythic and luminous",
+   "sub": "하늘의 아들 환웅\n태백산으로 내려오다",
+   "narr": "하늘의 아들 환웅이 바람과 비와 구름을 거느리고 태백산으로 내려왔다.",
+   "costume": true
+  },
+  {
+   "prompt": "A gigantic ancient sacred tree on a mountain top with ribbons tied to its branches, a crowd of three thousand followers gathering below, mystical fog",
+   "sub": "신단수 아래\n신시를 열다",
+   "narr": "그는 신단수 아래에 신시를 열고, 사람들을 다스렸다.",
+   "costume": true
+  },
+  {
+   "prompt": "A bear and a tiger sitting at the entrance of a dark mountain cave, looking pleadingly toward a glowing divine figure, fable-like",
+   "sub": "사람이 되고 싶었던\n곰과 호랑이",
+   "narr": "어느 날 곰과 호랑이가 찾아와 사람이 되기를 빌었다.",
+   "costume": false
+  },
+  {
+   "prompt": "Inside a pitch-dark cave, a bundle of mugwort and twenty cloves of garlic lying on a stone, a thin ray of light at the cave entrance, still life",
+   "sub": "쑥 한 줌과 마늘 스무 개\n그리고 백 일의 어둠",
+   "narr": "쑥 한 줌과 마늘 스무 개. 그리고 백 일 동안 햇빛을 보지 말 것.",
+   "costume": false
+  },
+  {
+   "prompt": "A tiger running out of a cave into the forest, while in the darkness of the cave a bear remains curled up patiently, contrast of motion and stillness",
+   "sub": "호랑이는 뛰쳐나가고\n곰은 견뎠다",
+   "narr": "호랑이는 견디지 못하고 뛰쳐나갔다. 곰은 끝까지 견뎠다.",
+   "costume": false
+  },
+  {
+   "prompt": "A serene young woman emerging from a cave into morning light, wearing simple ancient hemp clothes, her shadow faintly shaped like a bear, transformation",
+   "sub": "삼칠일 만에\n여인이 된 웅녀",
+   "narr": "삼칠일 만에 곰은 여인이 되었다. 사람들은 그녀를 웅녀라 불렀다.",
+   "costume": true
+  },
+  {
+   "prompt": "A dignified ancient king-priest holding a bronze mirror and a bronze dagger, standing before his people on a hill, sun behind him, the founding of a nation",
+   "sub": "단군왕검\n아사달에 나라를 세우다",
+   "narr": "웅녀와 환웅 사이에서 태어난 단군왕검이 아사달에 도읍하고 나라를 세웠다. 조선이다.",
+   "costume": true
+  },
+  {
+   "prompt": "Close-up of an aged hand turning pages of an old Korean woodblock-printed book by candlelight, a Buddhist monk's sleeve visible",
+   "sub": "고려의 승려 일연이\n『삼국유사』에 남긴 기록",
+   "narr": "이 이야기는 고려의 승려 일연이 쓴 삼국유사에 처음 남아 전한다.",
+   "costume": false,
+   "custom_costume": "13th-century Goryeo Buddhist monk in grey kasaya robe, shaved head"
+  },
+  {
+   "prompt": "People of many villages gathered around a shaman-king offering at a stone altar, with the ideal of benefiting all humankind, harmonious community scene",
+   "sub": "널리 인간을 이롭게 하라\n홍익인간",
+   "narr": "건국의 뜻은 단 하나. 널리 인간을 이롭게 하라.",
+   "costume": true
+  },
+  {
+   "prompt": "A Bronze Age bronze forge, workers pouring molten bronze into stone molds, sparks and vermilion glow, smoke",
+   "sub": "청동의 시대\n힘은 금속에서 나왔다",
+   "narr": "청동을 다루는 자가 힘을 가졌다. 고조선은 청동기 문화 위에서 자라났다.",
+   "costume": true
+  },
+  {
+   "prompt": "A Korean mandolin-shaped bronze dagger (bipa-hyeong donggeom) lying on cloth, dramatic close-up still life, ink texture",
+   "sub": "비파 모양의 청동검\n고조선의 상징",
+   "narr": "비파를 닮은 청동검. 이 칼이 나온 곳이 곧 고조선의 세력권이었다.",
+   "costume": false
+  },
+  {
+   "prompt": "A massive table-shaped dolmen (goindol) standing alone in a grassy field under a wide sky, people far away for scale",
+   "sub": "거대한 고인돌\n지배자의 무덤",
+   "narr": "들판에 남은 거대한 고인돌은 수백 명을 부릴 수 있었던 지배자의 무덤이다.",
+   "costume": true
+  },
+  {
+   "prompt": "Hundreds of ancient people hauling a huge flat capstone with ropes and logs across a field, epic labor scene",
+   "sub": "수백 명이 끌어 올린\n하나의 돌",
+   "narr": "돌 하나를 옮기려 수백 명이 밧줄을 당겼다. 그것은 곧 권력의 크기였다.",
+   "costume": true
+  },
+  {
+   "prompt": "An ancient tribal court scene: an elder judge seated on a raised platform, a kneeling accused man, villagers watching, solemn atmosphere",
+   "sub": "여덟 개의 법\n팔조법",
+   "narr": "고조선에는 여덟 가지 법이 있었다. 지금은 세 가지만 전한다.",
+   "costume": true
+  },
+  {
+   "prompt": "Symbolic still life: a broken bronze dagger, a sack of spilled grain, and iron shackles arranged on a stone floor",
+   "sub": "죽인 자는 죽이고\n다치게 한 자는 곡식으로 갚는다",
+   "narr": "사람을 죽인 자는 사형, 다치게 한 자는 곡식으로 갚고, 도둑질한 자는 노비가 되었다.",
+   "costume": false
+  },
+  {
+   "prompt": "Gojoseon soldiers facing a large army of Warring States Yan cavalry across a river valley, banners, tension before battle",
+   "sub": "서쪽의 연나라와\n맞서다",
+   "narr": "나라가 커지자 서쪽의 연나라와 부딪쳤다. 고조선은 땅의 일부를 잃기도 했다.",
+   "costume": true
+  },
+  {
+   "prompt": "A group of about a thousand refugees crossing a river at dusk, their leader in front with his hair in a topknot, carrying iron weapons",
+   "sub": "망명자 위만\n천여 명을 이끌고 오다",
+   "narr": "기원전 이 세기, 위만이 천여 명의 무리를 이끌고 망명해 왔다.",
+   "costume": true
+  },
+  {
+   "prompt": "An ancient Korean king on a wooden throne granting a commander a bronze seal of office, the commander bowing, palace of timber and earth",
+   "sub": "준왕은 그에게\n서쪽 변경을 맡겼다",
+   "narr": "준왕은 그를 믿고 서쪽 변경을 지키게 했다.",
+   "costume": true
+  },
+  {
+   "prompt": "A coup at night: armed men storming a timber palace gate with torches, a king fleeing by boat toward the south sea in the distance",
+   "sub": "기원전 194년\n위만, 왕위를 빼앗다",
+   "narr": "그러나 위만은 세력을 키워 왕을 몰아냈다. 준왕은 남쪽으로 내려갔다.",
+   "costume": true
+  },
+  {
+   "prompt": "A busy ancient iron workshop with blacksmiths hammering glowing iron, iron farming tools and weapons stacked, sparks",
+   "sub": "철기의 보급\n더 강해진 나라",
+   "narr": "위만 조선은 철기를 널리 퍼뜨리며 더 강한 나라가 되었다.",
+   "costume": true
+  },
+  {
+   "prompt": "Merchant caravans and boats converging at a riverside market, goods exchanged between southern tribes and Han traders, bustling",
+   "sub": "남쪽과 한나라 사이\n중계무역으로 부를 쌓다",
+   "narr": "남쪽 나라들과 한나라 사이를 잇는 중계무역으로 큰 부를 쌓았다.",
+   "costume": true
+  },
+  {
+   "prompt": "Emperor Wu of Han on a throne in a grand Han palace, angrily pointing at a map, ministers bowing",
+   "sub": "이를 못마땅하게 여긴\n한 무제",
+   "narr": "이를 위협으로 여긴 한나라 무제가 마침내 군대를 보냈다.",
+   "costume": false,
+   "custom_costume": "Western Han dynasty Chinese emperor and officials in Han-era robes and guan caps"
+  },
+  {
+   "prompt": "A massive Han army with lamellar armor and halberds marching by land and warships sailing by sea toward a walled city, epic scale",
+   "sub": "기원전 109년\n바다와 육지로 쳐들어오다",
+   "narr": "기원전 백구 년, 한의 대군이 바다와 육지 두 길로 밀려왔다.",
+   "costume": false,
+   "custom_costume": "Western Han dynasty Chinese soldiers in lamellar armor with ji halberds and crossbows"
+  },
+  {
+   "prompt": "Defenders on an earthen city wall shooting arrows down at attackers climbing ladders, smoke and chaos, determined faces",
+   "sub": "왕검성은\n일 년을 버텼다",
+   "narr": "우거왕의 왕검성은 무너지지 않았다. 꼬박 일 년을 버텼다.",
+   "costume": true
+  },
+  {
+   "prompt": "Inside a dim palace hall, ministers whispering secretly in shadows behind pillars, a dagger half-hidden, betrayal atmosphere",
+   "sub": "무너뜨린 것은\n안의 분열이었다",
+   "narr": "성을 무너뜨린 것은 칼이 아니었다. 지친 신하들 사이의 분열이었다.",
+   "costume": true
+  },
+  {
+   "prompt": "The fallen capital at dawn after battle: a broken banner, smoldering ruins, a bronze mirror lying in ash, single vermilion banner remnant",
+   "sub": "기원전 108년\n고조선, 무너지다",
+   "narr": "기원전 백팔 년. 왕검성이 함락되고, 고조선은 막을 내렸다.",
+   "costume": true
+  },
+  {
+   "prompt": "Scattered groups of people walking away from ruins in different directions across a vast landscape toward distant mountains, hopeful dawn",
+   "sub": "그러나 사람들은\n새로운 나라로 흩어졌다",
+   "narr": "하지만 그 사람들은 사라지지 않았다. 부여로, 고구려로, 남쪽 삼한으로 흩어져 새 나라의 씨앗이 되었다.",
+   "costume": true
+  },
+  {
+   "prompt": "A dolmen silhouetted against a huge setting sun, long shadows, contemplative ending, vast empty space",
+   "sub": "다음 이야기\n다섯 나라의 새벽",
+   "narr": "다음 이야기. 다섯 나라의 새벽.",
+   "costume": false
+  }
+ ],
+ "impacts": [
+  0,
+  21,
+  25,
+  28
+ ]
+}
