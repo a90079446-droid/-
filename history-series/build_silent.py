@@ -25,6 +25,7 @@ import build_episode as be
 HERE = be.HERE
 W, H, FPS, SR = be.W, be.H, be.FPS, be.SR
 XF = 0.8  # 전환 길이
+READ_CPS, READ_PAD = 7.0, 1.6  # 자막 읽기 속도(글자/초), 여유(초)
 
 
 # ------------------------------------------------------------ 박자 격자
@@ -51,11 +52,13 @@ def reading_bars(sc, bar):
     if "bars" in sc:
         return sc["bars"]
     n = len(sc.get("sub", "").replace("\n", "").replace(" ", ""))
-    need = max(4.6, n / 7.0 + 1.6)
+    need = max(4.6, n / READ_CPS + READ_PAD)
     return max(1, math.ceil(need / bar - 0.15))
 
 
 def build_timeline(ep, workdir):
+    global READ_CPS, READ_PAD
+    READ_CPS, READ_PAD = ep.get("read_cps", READ_CPS), ep.get("read_pad", READ_PAD)
     music, tempo, bar, first, mlen = beat_grid(ep, workdir)
     t = first if first < bar else 0.0
     tl = []
@@ -127,6 +130,10 @@ def chapter_frame(sc, ow, oh, seal, next_img=None, workdir=None):
         x0 = cx - int(170 * s) + int(r.normal(0, 6 * s))
         d.line([(x0, yy), (x0 + int(340 * s * r.uniform(0.85, 1)), yy + int(r.normal(0, 2 * s)))],
                fill=(30, 26, 24, int(r.uniform(10, 40))), width=max(1, int(6 * s)))
+    if sc.get("tag"):
+        f3 = ImageFont.truetype(be.FONT_R, int(36 * s), index=be.KR)
+        bb = d.textbbox((0, 0), sc["tag"], font=f3)
+        d.text((cx - (bb[2] - bb[0]) // 2 - bb[0], int(690 * s)), sc["tag"], font=f3, fill=(60, 50, 44, 255))
     a = np.asarray(img, np.float32) / 255
     fr = bg * (1 - a[..., 3:4]) + a[..., :3] * a[..., 3:4]
     ss = int(70 * s)

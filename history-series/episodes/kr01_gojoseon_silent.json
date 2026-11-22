@@ -6,105 +6,107 @@
  "seal": "朝",
  "mode": "silent",
  "bpm": 90,
+ "new_images": {
+  "31": "Night: a breathless messenger with a torch running up the steps of a timber palace, guards turning in alarm, urgent atmosphere. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "32": "A deposed ancient king and a few attendants landing by wooden boat on a misty southern seashore at dawn, looking back toward the north, exile. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "33": "At a riverbank border at dusk, a Han envoy's charioteer suddenly stabbing a Joseon noble escort who came to see them off, the envoy fleeing across the river, treachery. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Western Han dynasty Chinese soldiers and officials in lamellar armor or Han-era robes. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "34": "A young crown prince on horseback at a riverbank leading ten thousand armed men and thousands of horses, a Han envoy on the far bank raising a hand demanding they lay down weapons, tense hesitation. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Western Han dynasty Chinese soldiers and officials in lamellar armor or Han-era robes. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "35": "Inside a Han army command tent at night, two Han generals in armor shouting at each other across a map table, officers stepping back, rivalry. Western Han dynasty Chinese soldiers and officials in lamellar armor or Han-era robes. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "36": "In a dark timber palace chamber, an ancient king collapsing beside his throne, shadowy assassins slipping away, a fallen bronze crown ornament, tragic, no gore. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "37": "A lone loyal minister in armor standing defiantly atop a burning city gate, holding a spear, below him the vast besieging army, last stand. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps.",
+  "38": "In smoldering ashes of a ruined city, a small child's hands lifting an old bronze mirror, the mirror reflecting a faint dawn light, hope. Ancient Gojoseon people of the 2nd century BC: topknots, plain hemp clothing, fur and leather cloaks, bronze and iron weapons. Do NOT show gat hats, Joseon-dynasty hanbok, Japanese clothing. Traditional Korean ink wash painting (sumukhwa) mixed with cinematic illustration. Expressive black sumi ink brushstrokes, ink bleeding and splatter, dry-brush texture, on aged yellowed hanji paper with stains and fibers. Monochrome sepia and charcoal palette, only small accents of vermilion red. Dramatic light, film-still composition, 16:9. Absolutely no text, no letters, no calligraphy, no signature, no watermark, no seal stamps."
+ },
  "scenes": [
   {
    "img": 0,
-   "sub": "기원전 108년\n왕검성이 불타고 있었다",
+   "sub": "기원전 108년 여름\n왕검성이 불타고 있었다",
    "sfx": "fire",
    "era": "기원전 108년",
    "impact": true
   },
   {
    "img": 1,
-   "sub": "이천 년을 이어 온 나라\n그 시작은 하나의 신화였다",
+   "sub": "이 성은 일 년을 버텼다\n무엇이 이 성을 무너뜨렸을까",
    "sfx": "wind"
   },
   {
    "img": 2,
    "title_card": true,
-   "bars": 3,
+   "bars": 2,
    "sfx": "wind"
   },
   {
    "chapter": true,
    "num": "제1장",
-   "name": "신화",
+   "name": "백 일의 어둠",
+   "tag": "모든 것은 하나의 신화에서 시작되었다",
    "bars": 2
   },
   {
    "img": 3,
-   "sub": "하늘의 아들 환웅\n바람·비·구름을 거느리고 내려오다",
+   "sub": "하늘의 아들 환웅\n인간 세상을 내려다보았다",
    "sfx": "wind",
-   "era": "기원전 2333년"
+   "era": "신화의 시대"
   },
   {
    "img": 4,
-   "sub": "태백산 신단수 아래\n신시가 열렸다",
+   "sub": "바람·비·구름을 거느리고\n태백산 신단수 아래 내려오다",
    "sfx": "wind"
   },
   {
    "img": 5,
-   "sub": "곰과 호랑이가 찾아와\n사람이 되기를 빌었다",
+   "sub": "곰과 호랑이가 찾아왔다\n'사람이 되게 해 주십시오'",
    "sfx": "forest"
   },
   {
    "img": 6,
-   "sub": "쑥 한 줌, 마늘 스무 개\n그리고 백 일의 어둠",
+   "sub": "쑥 한 줌, 마늘 스무 개\n그리고 백 일 동안 빛을 보지 말 것",
    "sfx": "drip"
   },
   {
    "img": 7,
-   "sub": "호랑이는 뛰쳐나가고\n곰은 끝까지 견뎠다",
+   "sub": "호랑이는 뛰쳐나갔다\n곰은 견뎠다",
    "sfx": "drip"
   },
   {
    "img": 8,
-   "sub": "삼칠일 만에 여인이 된 곰\n웅녀",
+   "sub": "스무하루째 아침\n곰은 여인이 되었다",
    "sfx": "wind"
   },
   {
    "img": 9,
-   "sub": "단군왕검, 아사달에 나라를 세우다\n조선의 시작",
+   "sub": "그녀의 아들 단군왕검\n아사달에 나라를 세우다",
    "sfx": "wind",
+   "era": "기원전 2333년",
    "impact": true
   },
   {
-   "img": 10,
-   "sub": "이 이야기는 13세기 말\n일연의 『삼국유사』에 처음 기록되었다",
-   "sfx": "room",
-   "era": "고려 · 13세기"
-  },
-  {
    "img": 11,
-   "sub": "널리 인간을 이롭게 하라\n홍익인간",
-   "sfx": "crowd",
-   "era": "기원전 2333년"
+   "sub": "그의 손엔 청동거울\n뜻은 하나, 널리 인간을 이롭게 하라",
+   "sfx": "crowd"
   },
   {
    "chapter": true,
    "num": "제2장",
-   "name": "청동의 나라",
+   "name": "청동의 왕",
+   "tag": "하늘은 나라를 주었다. 지킬 힘은 불 속에서 나왔다",
    "bars": 2
   },
   {
    "img": 12,
-   "sub": "청동을 다루는 자가\n힘을 가졌다",
-   "sfx": "forge"
+   "sub": "구리와 주석을 녹이는 불\n청동을 가진 자가 왕이 되었다",
+   "sfx": "forge",
+   "era": "청동기 시대"
   },
   {
    "img": 13,
-   "sub": "비파 모양 청동검\n이 칼이 나온 곳이 고조선의 땅",
+   "sub": "비파를 닮은 청동검\n이 칼이 나오는 곳이 곧 고조선의 땅",
    "sfx": "room"
   },
   {
-   "img": 14,
-   "sub": "들판의 거대한 고인돌\n지배자의 무덤",
-   "sfx": "wind"
-  },
-  {
    "img": 15,
-   "sub": "돌 하나에 수백 명\n그것이 권력의 크기였다",
-   "sfx": "crowd"
+   "sub": "수백 명이 끌어 올린 고인돌\n돌의 무게가 곧 왕의 힘이었다",
+   "sfx": "wind"
   },
   {
    "img": 16,
@@ -113,87 +115,149 @@
   },
   {
    "img": 17,
-   "sub": "죽인 자는 죽음으로, 다치게 한 자는 곡식으로\n훔친 자는 노비가 되었다",
+   "sub": "죽이면 죽음, 다치게 하면 곡식으로\n훔치면 노비, 풀려나려면 50만 전",
    "sfx": "room"
   },
   {
    "img": 18,
-   "sub": "서쪽의 연나라와 맞서며\n땅을 잃기도 했다",
+   "sub": "서쪽에서 연나라 장수 진개가 쳐들어왔다\n고조선은 땅 이천여 리를 잃었다",
    "sfx": "drums",
-   "era": "기원전 3세기"
+   "era": "기원전 3세기",
+   "impact": true
   },
   {
    "chapter": true,
    "num": "제3장",
-   "name": "위만 조선",
+   "name": "강을 건넌 사내",
+   "tag": "청동보다 강한 것이 서쪽에서 오고 있었다",
    "bars": 2
   },
   {
    "img": 19,
-   "sub": "망명자 위만이\n천여 명을 이끌고 강을 건너다",
+   "sub": "연나라에서 온 망명자 위만\n상투를 틀고 조선의 옷을 입고 있었다",
    "sfx": "water",
    "era": "기원전 2세기"
   },
   {
    "img": 20,
-   "sub": "준왕은 그를 믿고\n서쪽 변경을 맡겼다",
+   "sub": "준왕은 그를 믿었다\n벼슬과 백 리 땅을 주고 서쪽 국경을 맡겼다",
    "sfx": "room"
   },
   {
+   "img": 31,
+   "sub": "어느 밤, 위만의 전령이 달려왔다\n'한나라 군대가 열 갈래로 쳐들어옵니다!'",
+   "sfx": "drums"
+  },
+  {
    "img": 21,
-   "sub": "위만은 왕을 몰아내고\n스스로 왕이 되었다",
+   "sub": "궁을 지키겠다며 들어온 위만\n그 칼끝은 준왕을 향했다",
    "sfx": "fire",
    "era": "기원전 194년",
    "impact": true
   },
   {
+   "img": 32,
+   "sub": "남쪽 바다로 달아난 준왕, 스스로 '한왕'이라 했다\n이 '한'이라는 이름을 기억해 두자",
+   "sfx": "water"
+  },
+  {
    "img": 22,
-   "sub": "철기가 퍼지고\n나라는 더 강해졌다",
+   "sub": "위만이 가져온 것은 철\n쇠 농기구와 쇠칼이 나라를 바꾸었다",
    "sfx": "forge"
   },
   {
    "img": 23,
-   "sub": "남쪽 나라들과 한나라 사이\n중계무역으로 부를 쌓다",
+   "sub": "남쪽 나라들과 한나라 사이의 길을 쥐고\n중계무역으로 부를 쌓았다",
    "sfx": "crowd"
   },
   {
    "chapter": true,
    "num": "제4장",
-   "name": "왕검성",
+   "name": "일 년의 성",
+   "tag": "부유한 나라를 노리는 눈이 있었다",
    "bars": 2
   },
   {
    "img": 24,
-   "sub": "이를 위협으로 본\n한나라 무제",
+   "sub": "위만의 손자 우거왕 시대\n한 무제는 길을 막는 조선이 못마땅했다",
    "sfx": "room",
    "era": "기원전 109년"
   },
   {
+   "img": 33,
+   "sub": "한의 사신 섭하는 배웅 나온 조선 왕족을 죽이고\n'적장을 베었다'며 상을 받았다",
+   "sfx": "water",
+   "impact": true
+  },
+  {
    "img": 25,
-   "sub": "바다와 육지, 두 길로\n한의 대군이 밀려왔다",
+   "sub": "조선이 섭하를 죽이자 전쟁이 시작됐다\n바다로 7천, 육지로 5만",
    "sfx": "drums",
    "impact": true
   },
   {
    "img": 26,
-   "sub": "우거왕의 왕검성은\n꼬박 일 년을 버텼다",
+   "sub": "먼저 닿은 수군 7천, 우거왕이 나가 쳐부쉈다\n패장은 열흘 넘게 산속에 숨었다",
    "sfx": "fire"
   },
   {
+   "img": 34,
+   "sub": "화친하러 강가에 선 태자와 군사 1만\n'무기를 버려라'는 말에 함정을 의심해 돌아섰다",
+   "sfx": "water"
+  },
+  {
+   "img": 35,
+   "sub": "몇 달이 지나도 성은 무너지지 않았다\n한의 두 장수는 서로 공을 다투었다",
+   "sfx": "room"
+  },
+  {
    "img": 27,
-   "sub": "성을 무너뜨린 것은 칼이 아니라\n안의 분열이었다",
+   "sub": "그사이 성 안에서도 금이 갔다\n대신들이 몰래 항복을 꾸몄다",
    "sfx": "silence"
   },
   {
-   "img": 28,
-   "sub": "고조선, 막을 내리다",
-   "sfx": "fire",
+   "img": 36,
+   "sub": "기원전 108년 여름\n우거왕이 신하가 보낸 자객의 손에 쓰러졌다",
+   "sfx": "silence",
    "era": "기원전 108년",
    "impact": true
   },
   {
+   "img": 37,
+   "sub": "그래도 대신 성기는\n끝까지 성문을 열지 않았다",
+   "sfx": "fire"
+  },
+  {
+   "img": 0,
+   "sub": "그리고 그 여름밤\n처음 보았던 불길로 돌아왔다",
+   "sfx": "fire"
+  },
+  {
+   "img": 28,
+   "sub": "고조선, 막을 내리다\n잿더미 속에 청동거울 하나",
+   "sfx": "fire",
+   "impact": true
+  },
+  {
+   "img": 24,
+   "sub": "이긴 한의 장수들은 처형되거나 평민이 되었고\n항복한 조선 대신들은 제후가 되었다",
+   "sfx": "room"
+  },
+  {
+   "chapter": true,
+   "num": "에필로그",
+   "name": "흩어진 씨앗",
+   "tag": "나라는 무너져도 사람은 남는다",
+   "bars": 2
+  },
+  {
+   "img": 38,
+   "sub": "잿더미 속에서\n한 아이가 거울을 주워 들었다",
+   "sfx": "wind"
+  },
+  {
    "img": 29,
-   "sub": "그러나 사람들은 흩어져\n부여·고구려·삼한의 씨앗이 되었다",
+   "sub": "사람들은 흩어졌다\n북쪽 부여로, 그리고 남쪽 '한'의 땅으로",
    "sfx": "wind"
   },
   {
@@ -201,5 +265,7 @@
    "sub": "다음 이야기\n다섯 나라의 새벽",
    "sfx": "wind"
   }
- ]
+ ],
+ "read_cps": 8.5,
+ "read_pad": 1.2
 }
