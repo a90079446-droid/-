@@ -32,7 +32,9 @@ Intro(조용한 노래 2줄, 드럼 없음) → Verse 1(8줄) → Pre(4줄) → 
 
 ## Suno 입력 순서와 기본값
 ① 제목 → ② 가사 → ③ 스타일 → ④ 제외 스타일 → ⑤ 기이함 15% → ⑥ 스타일 영향 85% → ⑦ 다양성(지금 쓰시는 값 유지)
-- 스타일은 v6용 문장형 편곡 설명으로 쓴다(템플릿은 `suno/profile_analysis.md`)
+- 스타일은 v6용 문장형 편곡 설명, 300~450자 (템플릿은 `suno/profile_analysis.md`)
+- 공통 규칙 `suno/_suno_tag_rules.md` 적용: 태그 지시 2~3개, 반복 사비·프리 태그는 글자 그대로 동일, 에너지 상승은 Final Chorus 태그에서만
+- 섹션 태그 틀(2~3개 지시): `[Verse: No sub bass, sparse drums, rapid delivery]` / `[Pre-Chorus: Tension builds, sub bass held back]` / `[Chorus: Heavy sub bass and big drums, soaring doubled vocals]` / `[Final Chorus: Half-step lift, loudest peak]`
 - 제외 스타일 기본: female vocals, falsetto, metal, screaming, EDM drop, country, autotune, lo-fi, muffled vocals, Christmas bells
 
 ## 이미 쓴 은유·제목 (겹치지 않게)
