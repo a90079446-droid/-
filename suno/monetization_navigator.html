@@ -1,0 +1,200 @@
+<title>수익화 내비게이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* VOICE work
+   IDEA a night navigator for a moon-themed playlist channel: the route to the YouTube Partner Program drawn as two climbing curves against their threshold lines
+   PICTURE two progress charts (rolling 12-month watch hours vs 4,000h, subscribers vs 1,000) that redraw as the inputs move
+   COLOUR deep indigo ground, moon-cream ink, moon gold accent, quiet violet for secondary
+   TYPE Inter Tight display + Inter text
+   LAYOUT laptop: title+finding across, controls left, charts right; phone: title, charts, controls */
+:root{color-scheme:dark;--bg:#12122a;--panel:#1b1b3a;--line:#2e2e57;--ink:#f3eedc;--mute:#a9a6c4;--gold:#f2c14e;--vio:#8f86d9;--ok:#7fd1a6;--warn:#f08a6b}
+*{box-sizing:border-box;min-width:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;margin:0;overflow-x:clip}
+.band{padding-block:clamp(24px,3.5vw,48px);padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin:0 auto}
+h1{font:700 clamp(32px,4.4vw,48px)/1.05 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin:0 0 10px}
+h2{font:600 22px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.01em;margin:0 0 12px}
+.finding{font-size:clamp(17px,2vw,20px);color:var(--ink);max-width:62ch;margin:0}
+.finding b{color:var(--gold);white-space:nowrap}
+.note{color:var(--mute);font-size:13px}
+.first{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.first{grid-template-columns:minmax(0,340px) minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.ctl{display:grid;gap:4px;margin-bottom:14px}
+.ctl label{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--mute)}
+.ctl label output{color:var(--ink);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--gold);height:28px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+button{font:500 14px Inter,sans-serif;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:8px 12px;cursor:pointer;min-height:40px}
+button:hover{border-color:var(--gold)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.figs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));margin-bottom:16px}
+.fig-n{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.fig-n b{display:block;font:700 clamp(22px,2.6vw,30px)/1.1 "Inter Tight",sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fig-n span{font-size:13px;color:var(--mute)}
+.gold{color:var(--gold)}
+.charts{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:1100px){.charts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fig{position:relative;min-height:240px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+svg text{font:13px Inter,sans-serif;fill:var(--mute);paint-order:stroke;stroke:var(--panel);stroke-width:4px}
+.lev{display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;gap:8px 12px;align-items:center;font-size:14px}
+.lev .bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden}
+.lev .bar i{display:block;height:100%;background:var(--gold)}
+.lev .v{white-space:nowrap;font-variant-numeric:tabular-nums}
+.two{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.formula{font-size:14px;display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.formula li{border-left:3px solid var(--vio);padding-left:10px}
+.formula code{font:13px ui-monospace,Menlo,monospace;color:var(--ink);overflow-wrap:anywhere}
+.phase{margin-bottom:18px}
+.phase h3{font:600 17px "Inter Tight",sans-serif;margin:0 0 8px;color:var(--gold)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:15px}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--gold);flex:none}
+.risk{border:1px solid var(--warn);border-radius:12px;padding:14px 16px}
+.risk h3{color:var(--warn);margin:0 0 6px;font:600 17px "Inter Tight",sans-serif}
+.risk ul,.src{margin:0;padding-left:18px;font-size:14px;display:grid;gap:6px}
+a{color:var(--gold)}
+.prog{font-size:14px;color:var(--mute);margin-bottom:10px}
+@media(prefers-reduced-motion:no-preference){.lev .bar i{transition:width .3s}}
+</style>
+
+<div class="band"><div class="wrap">
+<h1>수익화 내비게이터</h1>
+<p class="finding" id="finding">계산 중…</p>
+<p class="note">숫자는 모두 예시 가정입니다. 슬라이더를 내 채널의 실제 수치(유튜브 스튜디오)로 바꾸면 경로가 다시 계산됩니다.</p>
+</div></div>
+
+<div class="band" style="padding-top:0"><div class="wrap first">
+<div class="panel" id="controls">
+<div class="presets" role="group" aria-label="프리셋">
+<button id="p-low" data-p="low">보수적</button><button id="p-mid" data-p="mid">기본</button><button id="p-high" data-p="high">공격적</button><button id="p-reset" data-p="mid">초기화</button>
+</div>
+<div id="ctls"></div>
+</div>
+<div>
+<div class="figs" id="figs"></div>
+<div class="charts">
+<div class="panel"><h2>최근 12개월 시청 시간</h2><div class="fig"><svg id="c-hours" role="img" aria-label="최근 12개월 누적 시청 시간과 4,000시간 기준선"></svg></div></div>
+<div class="panel"><h2>구독자</h2><div class="fig"><svg id="c-subs" role="img" aria-label="누적 구독자와 1,000명 기준선"></svg></div></div>
+</div>
+</div>
+</div></div>
+
+<div class="band" style="padding-top:0"><div class="wrap two">
+<div class="panel">
+<h2>가장 효과 큰 레버</h2>
+<p class="prog">각 값을 20% 개선했을 때 수익화 조건 도달이 몇 달 당겨지는지</p>
+<div class="lev" id="lev"></div>
+</div>
+<div class="panel">
+<h2>계산 공식</h2>
+<ul class="formula">
+<li>영상 1개 첫 달 조회수 <code>V(m) = V₁ × (1 + 성장률)^min(m−1, 11)</code> (성장은 첫 12개월만, 이후 유지)</li>
+<li>월 조회수 <code>M(m) = 월 업로드 × V(m) + 지난 영상들 × 그 달 V × 롱테일 비율</code></li>
+<li>월 시청 시간(시간) <code>H(m) = M(m) × 영상 길이(분) × 평균 시청 비율 ÷ 60</code></li>
+<li>시청 시간 조건 <code>최근 12개월 H 합계 ≥ 4,000</code></li>
+<li>구독자 <code>누적 M × 1,000회당 구독 전환 ÷ 1,000 ≥ 1,000</code></li>
+<li>업로드 조건 <code>최근 90일 공개 업로드 ≥ 3개</code></li>
+<li>월 수익(원) <code>M(m) ÷ 1,000 × RPM(달러) × 환율</code></li>
+</ul>
+<p class="note">숏츠 피드 시청 시간은 4,000시간에 포함되지 않습니다. 숏츠는 별도 경로(90일 1,000만 회)입니다.</p>
+</div>
+</div></div>
+
+<div class="band" style="padding-top:0"><div class="wrap two">
+<div class="panel" id="guide"><h2>단계별 가이드라인</h2><p class="prog" id="gprog"></p><div id="phases"></div></div>
+<div style="display:grid;gap:20px;align-content:start">
+<div class="risk"><h3>수익화를 막는 위험</h3><ul>
+<li><b>찍어 낸 콘텐츠:</b> 유튜브가 2026년 7월 '반복·템플릿형' 기준을 '비진정성 콘텐츠'로 정리했습니다. 거의 같은 영상 반복은 채널 전체 수익화가 막힐 수 있습니다. 플리마다 선곡·썸네일·설명을 다르게 만드세요.</li>
+<li><b>Suno 권리:</b> 무료 플랜 곡은 수익화 불가. Pro·Premier 구독 중 만든 곡만 상업적 이용 가능하고, 업그레이드해도 예전 무료 곡에는 소급되지 않습니다.</li>
+<li><b>다운로드 한도(미확인):</b> 2026년 9월 3일부터 상업적 권리가 월 다운로드 한도(Pro 20곡, Premier 60곡) 안의 곡에만 적용된다는 3자 보도가 있습니다. Suno 공식 페이지에서 확인하세요.</li>
+<li><b>2027년 기준 변경설(출처 충돌):</b> 2027년 2월부터 시청 시간 8,000시간으로 오른다는 글이 있지만 같은 글 안에서도 부정합니다. 유튜브 스튜디오의 수익 창출 탭 숫자를 기준으로 하세요.</li>
+<li><b>라이브 스트림:</b> 크리에이터 뮤직의 수익 공유 곡은 라이브에 못 쓴다는 안내가 있습니다. 24시간 스트림 계획이면 권리부터 확인하세요.</li>
+</ul></div>
+<div class="panel"><h2>기준값 출처</h2><ul class="src">
+<li>YPP 조건: 구독자 1,000 + 최근 12개월 공개 시청 4,000시간 (또는 숏츠 90일 1,000만 회) + 90일 업로드 3개. 확장 단계 500명·3,000시간(광고 수익 제외) — <a href="https://support.google.com/youtube/answer/72851">YouTube 고객센터</a>, <a href="https://vidiq.com/blog/post/monetize-youtube-guide/">vidIQ</a></li>
+<li>음악 채널 RPM 중앙값 $2.28 (범위 $1.35~$4.16), 수익화 재생 비율 약 52% — <a href="https://air.io/en/air-data-findings/how-much-does-youtube-really-pay-in-2026-real-rpm-data-from-300-channels">AIR 300채널 조사</a></li>
+<li>Suno 상업적 권리 — <a href="https://help.suno.com/en/articles/9601665">Suno 고객센터</a>, <a href="https://dynamoi.com/learn/ai-music-distribution/suno-commercial-rights-explained">Dynamoi(다운로드 한도 보도)</a></li>
+<li>비진정성 콘텐츠 정책 — <a href="https://www.tubefilter.com/2026/07/13/youtube-inauthentic-content-monetization-policy-update/">Tubefilter</a>, <a href="https://techcrunch.com/2026/07/20/youtube-clarifies-policies-around-ai-slop-and-upsetting-videos/">TechCrunch</a></li>
+</ul></div>
+</div>
+</div></div>
+
+<script>
+{
+const START=new Date(2026,11,1);
+const DEF={
+ low:{upw:2,len:45,v1:60,g:8,avd:12,tail:20,conv:2,rpm:1.4,fx:1400},
+ mid:{upw:3,len:60,v1:150,g:15,avd:15,tail:30,conv:4,rpm:2.0,fx:1400},
+ high:{upw:4,len:75,v1:300,g:22,avd:20,tail:40,conv:6,rpm:2.8,fx:1400}};
+const C=[
+ ["upw","주당 업로드",1,7,1,v=>v+"개"],
+ ["len","플리 길이",20,120,5,v=>v+"분"],
+ ["v1","첫 달 영상당 조회수",10,2000,10,v=>v.toLocaleString()+"회"],
+ ["g","영상당 조회수 월 성장률",0,40,1,v=>v+"%"],
+ ["avd","평균 시청 비율",5,50,1,v=>v+"%"],
+ ["tail","롱테일 (첫 달 대비 매달)",0,80,5,v=>v+"%"],
+ ["conv","1,000회당 구독 전환",0.5,15,0.5,v=>v+"명"],
+ ["rpm","RPM (1,000회당)",0.5,6,0.1,v=>"$"+v.toFixed(1)],
+ ["fx","환율 (원/달러)",1000,1800,10,v=>v.toLocaleString()+"원"]];
+let S={...DEF.mid};
+try{const s=JSON.parse(localStorage.getItem("nav-s")||"null");if(s)S={...S,...s}}catch(e){}
+const ctls=document.getElementById("ctls");
+ctls.innerHTML=C.map(([k,l,mn,mx,st])=>`<div class="ctl"><label for="i-${k}">${l}<output id="o-${k}"></output></label><input type="range" id="i-${k}" min="${mn}" max="${mx}" step="${st}"></div>`).join("");
+const sim=(p,N=36)=>{const U=p.upw*52/12;let subs=0,hrs=[],subsA=[],mon=[],rev=[],firstV=[],elig=null,exp=null;
+ for(let m=1;m<=N;m++){const V=p.v1*Math.pow(1+p.g/100,Math.min(m-1,11));firstV.push(V);
+  let tail=0;for(let k=0;k<m-1;k++)tail+=U*firstV[k]*p.tail/100;
+  const M=U*V+tail;mon.push(M);const H=M*p.len*(p.avd/100)/60;hrs.push(H);
+  subs+=M*p.conv/1000;subsA.push(subs);rev.push(M/1000*p.rpm*p.fx);
+  const roll=hrs.slice(Math.max(0,m-12)).reduce((a,b)=>a+b,0);hrs[m-1+"r"]=roll;
+  if(exp===null&&roll>=3000&&subs>=500&&p.upw*13>=3)exp=m;
+  if(elig===null&&roll>=4000&&subs>=1000&&p.upw*13>=3)elig=m;}
+ const roll=[];for(let m=1;m<=N;m++)roll.push(hrs[m-1+"r"]);
+ return{roll,subsA,mon,rev,elig,exp,N}};
+const ym=m=>{const d=new Date(START);d.setMonth(d.getMonth()+m-1);return d.getFullYear()+"년 "+(d.getMonth()+1)+"월"};
+const won=x=>x>=1e8?(x/1e8).toFixed(1)+"억원":x>=1e4?Math.round(x/1e4).toLocaleString()+"만원":Math.round(x).toLocaleString()+"원";
+function chart(id,data,th,th2,fmt,elig){const s=document.getElementById(id);const draw=()=>{const W=s.clientWidth,H=s.clientHeight;if(!W||!H)return;
+ const L=52,R=14,T=14,B=28,max=Math.max(th*1.25,...data);const x=i=>L+(W-L-R)*i/(data.length-1),y=v=>T+(H-T-B)*(1-v/max);
+ const pts=data.map((v,i)=>x(i)+","+y(v)).join(" ");
+ const ticks=[0,th/2,th,max>th*1.6?th*1.5:null].filter(v=>v!==null);
+ const step=W<520?12:6;let xl="";for(let i=0;i<data.length;i+=step)xl+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${i+1}개월</text>`;
+ let g=ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${fmt(v)}</text>`).join("");
+ const thl=`<line x1="${L}" x2="${W-R}" y1="${y(th)}" y2="${y(th)}" stroke="var(--gold)" stroke-dasharray="5 4"/>`+(th2?`<line x1="${L}" x2="${W-R}" y1="${y(th2)}" y2="${y(th2)}" stroke="var(--vio)" stroke-dasharray="2 4"/>`:"");
+ const area=`<polygon points="${x(0)},${y(0)} ${pts} ${x(data.length-1)},${y(0)}" fill="var(--vio)" opacity=".18"/>`;
+ const mk=elig?`<circle cx="${x(elig-1)}" cy="${y(data[elig-1])}" r="5" fill="var(--gold)"/><text x="${Math.min(x(elig-1)+8,W-R-60)}" y="${Math.max(y(data[elig-1])-10,T+12)}" style="fill:var(--gold)">${elig}개월 도달</text>`:"";
+ s.innerHTML=g+thl+area+`<polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`+mk+xl;};
+ draw();if(!s._ro){s._ro=new ResizeObserver(()=>s._draw&&s._draw());s._ro.observe(s)}s._draw=draw;}
+const LEV=[["upw","주당 업로드"],["v1","첫 달 조회수"],["g","월 성장률"],["avd","평균 시청 비율"],["len","플리 길이"],["conv","구독 전환"],["tail","롱테일"]];
+function render(){C.forEach(([k,,,,,f])=>{document.getElementById("i-"+k).value=S[k];document.getElementById("o-"+k).textContent=f(+S[k])});
+ const r=sim(S);const f=document.getElementById("finding");
+ if(r.elig){f.innerHTML=`지금 설정이면 <b>${r.elig}개월 뒤 (${ym(r.elig)})</b> 광고 수익화 조건을 채웁니다. 그 달 예상 월수익은 <b>${won(r.rev[r.elig-1])}</b>입니다.`}
+ else f.innerHTML=`지금 설정으로는 <b>36개월 안에</b> 광고 수익화 조건에 닿지 않습니다. 아래 '가장 효과 큰 레버'부터 올려 보세요.`;
+ const m12=Math.min(12,r.N),last=r.N;
+ document.getElementById("figs").innerHTML=[
+  [r.elig?r.elig+"개월":"36개월+","광고 수익화 (1,000명·4,000시간)",1],
+  [r.exp?r.exp+"개월":"36개월+","확장 단계 (500명·3,000시간)",0],
+  [Math.round(r.subsA[m12-1]).toLocaleString()+"명","12개월째 구독자",0],
+  [won(r.rev[last-1]),"36개월째 월수익 (추정)",0]].map(([b,s,g])=>`<div class="fig-n"><b class="${g?"gold":""}">${b}</b><span>${s}</span></div>`).join("");
+ chart("c-hours",r.roll,4000,3000,v=>v>=1000?(v/1000).toFixed(v%1000?1:0)+"천":Math.round(v)+"",r.elig);
+ chart("c-subs",r.subsA,1000,500,v=>Math.round(v).toLocaleString(),r.elig);
+ const base=r.elig||37;const res=LEV.map(([k,l])=>{const p={...S};p[k]=k==="upw"?Math.min(7,p[k]*1.2):p[k]*1.2;const e=sim(p).elig||37;return[l,base-e]}).sort((a,b)=>b[1]-a[1]);
+ const mx=Math.max(1,...res.map(x=>x[1]));
+ document.getElementById("lev").innerHTML=res.map(([l,d])=>`<span>${l}</span><span class="bar"><i style="width:${Math.max(0,d)/mx*100}%"></i></span><span class="v">${d>0?d+"개월 단축":"변화 없음"}</span>`).join("");
+ try{localStorage.setItem("nav-s",JSON.stringify(S))}catch(e){}}
+ctls.addEventListener("input",e=>{const k=e.target.id.slice(2);S[k]=+e.target.value;render()});
+document.querySelectorAll(".presets button").forEach(b=>b.addEventListener("click",()=>{S={...DEF[b.dataset.p]};render()}));
+const PH=[
+ ["0단계 · 시작 전",["Suno Pro 이상 구독 상태에서 곡 만들기 (무료 곡은 수익화 불가)","채널 테마를 상황 하나로 고정 (예: 밤, 어른스러운 힙합)","2단계 인증 켜기, 애드센스 계정 준비","유튜브 AI 생성 콘텐츠 표기 규정 확인"]],
+ ["1단계 · 구독자 0 → 500",["주 2~3개 이상 같은 요일에 올리기","플리 길이 45~75분 (시청 시간이 4,000시간의 연료)","제목은 장르가 아니라 상황으로 (선곡을 모른 채 제목·썸네일로 들어옴)","썸네일 톤·글꼴 통일, 곡마다 선곡·설명은 다르게","곡의 훅 15~30초로 숏츠 만들어 채널로 유입 (숏츠 시청은 4,000시간에 미포함)"]],
+ ["2단계 · 500 → 1,000명 · 4,000시간",["유튜브 스튜디오에서 세부 장르별 클릭률·평균 시청 시간·재방문 비교","반응 좋은 세부 장르 비중 늘리기","플리 영상 끝 화면에 다음 플리 연결해 연속 시청 늘리기","확장 단계(500명·3,000시간) 도달 시 멤버십 등 신청 검토"]],
+ ["3단계 · 수익화 이후",["RPM 높은 시청 국가 비중 확인 (시청자 지도에 따라 RPM이 달라짐)","잘된 플리의 후속 시리즈 만들기","반복·템플릿형으로 보이지 않게 매 업로드 차별점 점검"]]];
+let done={};try{done=JSON.parse(localStorage.getItem("nav-c")||"{}")}catch(e){}
+const ph=document.getElementById("phases");
+ph.innerHTML=PH.map(([h,items],i)=>`<div class="phase"><h3>${h}</h3>`+items.map((t,j)=>`<label class="chk"><input type="checkbox" id="c-${i}-${j}">${t}</label>`).join("")+"</div>").join("");
+const gp=()=>{const all=ph.querySelectorAll("input"),n=[...all].filter(x=>x.checked).length;document.getElementById("gprog").textContent=`${all.length}개 중 ${n}개 완료 · 체크 상태는 이 브라우저에만 저장됩니다`};
+ph.querySelectorAll("input").forEach(x=>{x.checked=!!done[x.id];x.addEventListener("change",()=>{done[x.id]=x.checked;try{localStorage.setItem("nav-c",JSON.stringify(done))}catch(e){}gp()})});
+gp();render();
+}
+</script>
